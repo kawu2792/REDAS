@@ -139,6 +139,52 @@
                 </ol>
             </nav>
 
+            <!-- Secondary Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-2 no-print">
+                <div class="container-fluid px-4">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#secondaryNavbar" aria-controls="secondaryNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="secondaryNavbar">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" href="dashboard-state.html">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="operationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Operations
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="operationsDropdown">
+                                    <li><a class="dropdown-item" href="data-entry.html?role=state"><i class="fas fa-edit me-2"></i>Submit Report</a></li>
+                                    <li><a class="dropdown-item" href="report-generation.html?role=state"><i class="fas fa-history me-2"></i>My Submissions</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="personnelDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Personnel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="personnelDropdown">
+                                    <li><a class="dropdown-item" href="nominal-roll.html?role=state"><i class="fas fa-users me-2"></i>Nominal Roll</a></li>
+                                    <li><a class="dropdown-item" href="user-management.html?role=state"><i class="fas fa-users-cog me-2"></i>User Management</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" href="notifications.html"><i class="fas fa-bell me-2"></i>Communications</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="informationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Information
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="informationDropdown">
+                                    <li><a class="dropdown-item" href="REDAS.html"><i class="fas fa-info-circle me-2"></i>About REDAS</a></li>
+                                    <li><a class="dropdown-item" href="profile-settings.html"><i class="fas fa-user-cog me-2"></i>Profile Settings</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
             <div class="container-fluid px-4">
                 <!-- Reporting Info -->
                 <div class="alert alert-success mt-4 no-print" role="alert">

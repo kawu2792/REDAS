@@ -114,6 +114,53 @@
                 </ol>
             </nav>
 
+            <!-- Secondary Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-2">
+                <div class="container-fluid px-4">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#secondaryNavbar" aria-controls="secondaryNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="secondaryNavbar">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" href="dashboard-zonal.html">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="operationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Operations
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="operationsDropdown">
+                                    <li><a class="dropdown-item" href="data-entry.html?role=zonal"><i class="fas fa-edit me-2"></i>Data Entry</a></li>
+                                    <li><a class="dropdown-item" href="report-generation.html?role=zonal"><i class="fas fa-chart-pie me-2"></i>Reports Archive</a></li>
+                                    <li><a class="dropdown-item" href="prs-reports.html"><i class="fas fa-file-alt me-2"></i>PRS Reports</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="personnelDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Personnel
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="personnelDropdown">
+                                    <li><a class="dropdown-item" href="nominal-roll.html?role=zonal"><i class="fas fa-users me-2"></i>Nominal Roll</a></li>
+                                    <li><a class="dropdown-item" href="user-management.html?role=zonal"><i class="fas fa-users-cog me-2"></i>User Management</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" href="notifications.html"><i class="fas fa-bell me-2"></i>Communications</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" id="informationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Information
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="informationDropdown">
+                                    <li><a class="dropdown-item" href="REDAS.html"><i class="fas fa-info-circle me-2"></i>About REDAS</a></li>
+                                    <li><a class="dropdown-item" href="profile-zonal.html"><i class="fas fa-user-cog me-2"></i>Profile Settings</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
             <div class="container-fluid px-4">
                 <!-- Overview Stats -->
                 <div class="row g-3 my-2">
@@ -379,7 +426,7 @@
         <div id="approvalToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    <i class="fas fa-check-circle me-2"></i> Report approved and forwarded to HQ (PRS Directorate).
+                    <i class="fas fa-check-circle me-2"></i> Report approved and forwarded to PRS Directorate!
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>

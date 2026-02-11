@@ -536,7 +536,7 @@ function emailStateAnalysisReport(stateName) {
 function generateNISTemplate(stateName) {
     const data = staffData.states[stateName];
     const date = new Date().toLocaleDateString();
-    
+
     if (!data) return "Error: State data not found.";
 
     // Map Ranks to Cadres based on NIS structure
@@ -551,278 +551,665 @@ function generateNISTemplate(stateName) {
     const total = data.totalStaff;
 
     return `NIGERIA IMMIGRATION SERVICE
+
 NIS REPORTING TEMPLATE FOR MONTHLY, QUARTERLY, BI-ANNUAL AND ANNUAL REPORT
 
-A. STATES, ZONAL AND SPECIAL COMMANDS: REPORTING TEMPLATE
-NAME OF THE COMMAND: ${stateName.toUpperCase()} COMMAND
+A. STATES, ZONAL AND SPECIAL COMMANDS:
+REPORTING TEMPLATE
+NAME OF THE: ${stateName.toUpperCase()} COMMAND
 PERIOD OF RETURN: ${date}
 
 1. STAFF STRENGTH (Current nominal roll to be attached)
-------------------------------------------------------------
-Cadre                   | NUMBER
-------------------------------------------------------------
-Compt. Cadre            | ${comptCadre}
-Superintendent Cadre    | ${suptCadre}
-Inspectorate Cadre      | ${inspCadre}
-Assistant Cadre         | ${asstCadre}
-------------------------------------------------------------
-TOTAL                   | ${total}
-------------------------------------------------------------
+Cadre	NUMBER
+Compt.Cadre	${comptCadre}
+Superintendent Cadre	${suptCadre}
+Inspectorate Cadre	${inspCadre}
+Assistant Cadre	${asstCadre}
+TOTAL	${total}
+
 
 2. GENERAL SERVICES:
 A. ARMS/ARMOURY RETURNS:
-S/N | TYPES          | CONDITION     | NUMBERS | TOTAL | GRAND TOTAL
---------------------------------------------------------------------
-1.  | G3 RIFLE       | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-2.  | AR70 RIFLE     | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-3.  | AK47 RIFLE     | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-4.  | GALIL RIFLE    | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-5.  | LAR RIFLE      | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-6.  | SMG RIFLE      | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-7.  | PISTOL BARETTA | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-8.  | DICON PISTOL   | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-9.  | STONE PISTOL   | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
-10. | OTHERS         | SERVICEABLE   |         |       |
-    |                | UNSERVICEABLE |         |       |
---------------------------------------------------------------------
-    | TOTAL          |               |         |       |
---------------------------------------------------------------------
+
+S/N	TYPES	CONDITION OF THE
+ARMS	NUMBERS	TOTAL	GRAND TOTAL
+
+1.	
+G3 RIFLE	SERVICEABLE			
+		UNSERVOICEABLE			
+2.	AR70 RIFLE	SERVICEABLE			
+ 
+
+
+
+		UNSERVOICEABLE			
+
+3.	
+AK47 RIFLE	SERVICEABLE			
+		UNSERVOICEABLE			
+
+4.	GALIL
+RIFLE	SERVICEABLE			
+		UNSERVOICEABLE			
+
+5.	
+LAR RIFLE	SERVICEABLE			
+		UNSERVOICEABLE			
+
+6.	
+SMG RIFLE	SERVICEABLE			
+		UNSERVOICEABLE			
+
+7.	PISTOL
+BARETTA	SERVICEABLE			
+		UNSERVOICEABLE			
+
+8.	DICON
+PISTOL	SERVICEABLE			
+		UNSERVOICEABLE			
+
+9.	STONE
+PISTOL	SERVICEABLE			
+		UNSERVOICEABLE			
+
+10.	
+OTHERS	SERVICEABLE			
+		UNSERVOICEABLE			
+		TOTAL			
+ 
+
 
 B. AMMUNITION:
-S/N | TYPES | NO. OF ROUNDS | TOTAL | NO. USED | BAL C/F
---------------------------------------------------------
-    |       |               |       |          |
---------------------------------------------------------
 
-C. STORE RETURNS:
-S/N | ITEMS | BAL B/F | QTY RECEIVED | TOTAL | QTY ISSUED | TOTAL BAL
----------------------------------------------------------------------
-    |       |         |              |       |            |
----------------------------------------------------------------------
+S/N	TYPES	NO.OF ROUNDS
+OF AMMUNITION	TOTAL	NO.OF USED
+AMMUNITION	BAL.C/F
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+	TOTAL				
 
-D. VEHICLE RETURNS:
-S/N | TYPES | ID (ENG/CHASSIS) | VEHICLE NO | REMARK
-----------------------------------------------------
-    |       |                  |            |
-----------------------------------------------------
+C.	STORE RETURNS:
 
-E. PROJECTS:
-S/N | DESCRIPTION | YEAR | LOCATION | CONTRACTOR | STATUS | % COMPLETION
-------------------------------------------------------------------------
-    |             |      |          |            |        |
-------------------------------------------------------------------------
+S/N	ITEMS	BAL.
+BROUGHT
+FORWARD	QUANTITY
+RECEIVED	TOTAL	QUANTITY
+ISSUED	TOTAL
+BALANCE
+						
+						
+						
+						
+						
+						
+						
+						
+	TOTAL					
+ 
 
+
+D: VEHICLE RETURNS:
+
+
+S/N	TYPES	IDENTIFICATION
+(Engine/Chassis No.)	VEHICLE
+NUMBER	REMARK (Serviceable, or Unserviceable)
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+	TOTAL			
+
+
+E.	PROJECTS:
+
+S/N	PROJECT
+DESCRIPTION	YEAR OF
+AWARD	LOCATION	NAME OF THE
+CONTRACTOR	STATUS	PERCENTAGE
+COMPLETION
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+ 
 3. STAFF DEVELOPMENT:
-S/N | WORKSHOP/SEMINAR | LOCATION | COST | PARTICIPANTS | DURATION
-------------------------------------------------------------------
-    |                  |          |      |              |
-------------------------------------------------------------------
+This will analyses all the training/workshops and seminars for the year and the number of participants and place of the training.
+
+S/N	NAME OF THE
+WORKSHOP/SEMINAR	LOCATION	COST
+IMPLIC
+ATION	NO.OF
+PARTICIPAN
+TS	DURATION
+					
+					
+					
+					
+					
+					
+					
+					
 
 4. PASSPORT ADMINISTRATION ACTIVITIES:
-S/N | Type of cases | Number of cases
------------------------------------
-1.  | Fresh         |
-2.  | Re-issue      |
-3.  | Marriage      |
-4.  | Lost          |
------------------------------------
-    | Total         |
------------------------------------
 
-5. CHANGE OF DATA ACTIVITIES (PASSPORT HEADQUARTERS ONLY):
-S/NO | Type of cases            | Number of cases
--------------------------------------------------
-1.   | Change of Date of birth  |
-2.   | Change of Place of birth |
-3.   | Change of Signature      |
-4.   | Change of Name/s         |
-5.   | Others                   |
--------------------------------------------------
+S/NO	Type of cases	Number of cases
+1.	Fresh	
+2.	Re-issue	
+3.	Marriage	
+4.	Lost	
+	Total	
+5. CHANGE OF DATAACTIVITIES (PASSPORT HEADQUARTERS ONLY):
+
+S/NO	Type of cases	Number of cases
+1.	Change of Date of birth	
+2.	Change of Place of birth	
+3.	Change of Signature	
+4.	Change of Name/s	
+5.	Others	
+ 
+
+3. STAFF DEVELOPMENT:
+This will analyses all the training/workshops and seminars for the year and the number of participants and place of the training.
+
+S/N	NAME OF THE
+WORKSHOP/SEMINAR	LOCATION	COST IMPLICATION	NO.OF
+PARTICIPAN
+TS	DURATION
+					
+					
+					
+					
+					
+					
+					
+					
+
+4. PASSPORT ADMINISTRATION ACTIVITIES:
+
+S/NO	Type of cases	Number of cases
+1.	Fresh	
+2.	Re-issue	
+3.	Marriage	
+4.	Lost	
+	Total	
+5. CHANGE OF DATAACTIVITIES (PASSPORT HEADQUARTERS ONLY):
+
+S/NO	Type of cases	Number of cases
+1.	Change of Date of birth	
+2.	Change of Place of birth	
+3.	Change of Signature	
+4.	Change of Name/s	
+5.	Others	
+ 
+
 
 6. PASSPORT REVENUE:
-e-passport:             | No. Issued | Amount (N)
--------------------------------------------------
-32-Pages(5 Years)       |            |
-64-Pages(5 Years)       |            |
-Enhanced e-Passport:    |            |
-32-Pages(5 Years)       |            |
-64-Pages(5 Years)       |            |
-64-Pages(10 Years)      |            |
-ECOWAS TRAVEL CERT      |            |
--------------------------------------------------
-TOTAL                   |            |
--------------------------------------------------
+
+e-passport:	NO. of ppt. Issued	Amount Generated(N)
+32-Pages(5 Years)		
+64-Pages(5 Years)		
+Enhanced e-Passport:		
+32-Pages(5 Years)		
+64-Pages(5 Years)		
+64-Pages(10 Years)		
+ECOWAS TRAVEL
+CERTIFICATE(ETC)		
+TOTAL		
 
 7. PASSPORT STOCK RETURNS:
-[Enter Stock Balance, Collected, Issued, Voided, Amount, Balance]
 
-8. VISA AND RESIDENCY:
-Type                        | Number | Amount (N)
--------------------------------------------------
-Residence Card              |        |
-V/Pass Ext (ECOWAS)         |        |
-CERPAC (African)            |        |
-CERPAC (Non-African)        |        |
-V/Pass Ext (Non-ECOWAS)     |        |
-PUR                         |        |
-ECOWAS Registration         |        |
--------------------------------------------------
+
+	32-Pages
+(5 Years)	54-Pages
+(5 Years)	32-Pages(5
+Years)-
+Enhanced
+e-Passport	64-Pages
+(5 Years)-
+Enhanced
+e-Passport	64-Pages
+(10 Years)
+)-Enhanced
+e-Passport	ECOWAS TRAVEL CERTIFICATE(ETC)
+Balance brought forward						
+No. Of passport collected
+from ppt. H/qtrs						
+No. Of passport issued in
+the states						
+No. Of passport voided
+(damage)						
+Amount (voided/damage)						
+Stock balance						
+ 
+
+
+8. VISAAND RESIDENCY:
+
+
+	Number	Amount Generated(N)
+Residence Card		
+V/Pass Extension to
+ECOWAS Nationals		
+CERPAC to African Nationals		
+CERPAC to Non Africans		
+V/Pass Extension to Non
+ECOWAS National		
+PUR		
+ECOWAS National
+Registration		Not Applicable
+
+
 
 9. FREE TRADE ZONE:
-ACTIVITY       | NUMBER
------------------------
-REGULARIZATION |
-RENEWAL        |
-COE            |
-RE-DESIGNATION |
------------------------
-TOTAL          |
------------------------
+
+	NUMBER
+REGULARIZATION	
+RENEWAL	
+COE	
+RE-DESIGNATION	
+TOTAL	
+ 
 
 10. QUOTA:
-ACTIVITY                            | NUMBER
---------------------------------------------
-No. of companies that open file     |
-No. of quota Placement for ROS      |
-No. of quota Placement for Renewal  |
-No. of quota Placement for COE      |
-No. of quota Placement for Re-desig |
---------------------------------------------
+	NUMBER
+No. of companies that open file	
+No. of quota Placement for ROS	
+No. of quota Placement for
+Renewal	
+No. of quota Placement for
+COE	
+No. of quota Placement for
+Re-designation	
 
 11. VISA & RESIDENCY (REVENUE):
-ACTIVITY       | NUMBER | AMOUNT GENERATED (N)
-----------------------------------------------
-REGULARIZATION |        |
-RENEWAL        |        |
-COE            |        |
-RE-DESIGNATION |        |
-V/P EXTENSION  |        |
-----------------------------------------------
-
+	NUMBER	AMOUNT GENERATED(N)
+REGULARIZATION		
+RENEWAL		
+COE		
+RE-DESIGNATION		
+V/P EXTENSION		
 12. MIGRATION/ANTI HUMAN TRAFFICKING AND CHILD LABOUR:
-ACTIVITIES                  | Number | Status/Remark
-----------------------------------------------------
-Migrants Intercepted        |        |
-Smugglers Arrested          |        |
-Victims Rescued             |        |
-Traffickers Apprehended     |        |
-Victims referred to NAPTIP  |        |
-Traffickers ref to NAPTIP   |        |
-Victims Re-United           |        |
-Victims/migrants Repatriated|        |
-----------------------------------------------------
 
-13. MIGRATION:
+ACTIVITIES	Number	Status or Remark
+Migrants
+Intercepted.		
+Smugglers Arrested		
+No. of HT&CL
+Victims Rescued		
+No. of Human
+Traffickers
+apprehended		
+ 
 
+No. of HT&CL
+Victims referred to
+NAPTIP		
+No. of HT&CL
+Traffickers referred
+NAPTIP		
+No. of HT&CL
+Victims Re-United		
+No.of
+Victims/migrants
+Repatriated		
+
+13.MIGRATION:
+PERIOD OF RETURN:
+a. MIGRATION/HUMAN TRAFFICKING AND CHILD LABOUR:
+ACTIVITIES	Number	Status or Remark
+Migrants
+Intercepted.(SoM)		
+Smugglers (SoM)
+Arrested		
+No. of HT&CL
+Victims Rescued		
+No.of Human
+Traffickers
+apprehended		
+No. of HT&CL
+Victims referred
+to NAPTIP		
+ 
+
+
+
+No. of HT&CL
+Traffickers
+referred NAPTIP		
+No. of HT&CL
+Victims Re-
+United		
+No.of
+Victims/migrants
+Repatriated
+(SoM)		
+
+LABOUR IMMIGRATION:
 b. NUMBER OF FOREIGNERS EMPLOYED IN NIGERIA:
-S/N | NAME | GENDER | NATIONALITY | DEPENDANTS | POSITION | INDUSTRY/SECTOR
----------------------------------------------------------------------------
-    |      |        |             |            |          |
----------------------------------------------------------------------------
+
+S/N	NAME	GRNDIR	NATIONALITY	NUMBER OF
+DEPENDANTS	POSITION	INDUSTRY/SE CTOR
+						
+						
+						
+						
+						
+						
+ 
+
 SUMMARY:
-CATEGORY                                | MALE | FEMALE | TOTAL
----------------------------------------------------------------
-Number of foreigners employed in Nigeria|      |        |
-Number of dependents                    |      |        |
-TOTAL                                   |      |        |
----------------------------------------------------------------
+
+
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+Number of foreigners employed in Nigeria			
+2.	Number of dependents			
+	TOTAL			
+
+
+
 
 c. NUMBER OF FOREIGNERS ISSUED WITH WORK PERMITS:
-S/N | NAME | GENDER | NATIONALITY | TYPES OF PERMIT | DURATION
---------------------------------------------------------------
-    |      |        |             |                 |
---------------------------------------------------------------
+
+S/N	NAME	GRNDER	NATION
+ALITY	TYPES OF
+PERMIT	DURATION
+					
+					
+					
+					
+ 
+
 SUMMARY:
-CATEGORY                                     | MALE | FEMALE | TOTAL
---------------------------------------------------------------------
-NUMBER OF FOREIGNERS ISSUED WITH WORK PERMITS|      |        |
-TOTAL                                        |      |        |
---------------------------------------------------------------------
+
+
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+NUMBER OF FOREIGNERS ISSUED WITH WORK
+PERMITS			
+	TOTAL			
 
 d. NUMBER OF IRREGULAR MIGRANTS EMPLOYED:
-S/N | NAME | GENDER | NATIONALITY | POSITION | DURATION | SECTOR
-----------------------------------------------------------------
-    |      |        |             |          |          |
-----------------------------------------------------------------
+
+
+S/N	NAME	GRNDER	NATION
+ALITY	POSITION	DURATION	SECTOR
+						
+						
+						
+						
+ 
+
 SUMMARY:
-CATEGORY                              | MALE | FEMALE | TOTAL
--------------------------------------------------------------
-NUMBER OF IRREGULAR MIGRANTS EMPLOYED |      |        |
-TOTAL                                 |      |        |
--------------------------------------------------------------
+
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+NUMBER OF IRREGULAR MIGRANTS
+EMPLOYED			
+	TOTAL			
+
+
+
 
 e. NUMBER OF SEASONAL MIGRANTS EMPLOYED:
-[Enter Table Data Here]
 
-f. NUMBER OF BORDER MIGRANTS EMPLOYED:
-[Enter Table Data Here]
+S/N	NAME	GRNDE
+R	NATION
+ALITY	POSITION	DURATION	SECTOR
+						
+						
+						
 
+SUMMARY:
+
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+NUMBER OF SEASONAL MIGRANTS EMPLOYED			
+	TOTAL			
+
+F. NUMBER OF BORDER MIGRANTS EMPLOYED:
+
+S/N	NAME	GRNDER	NATIONALITY	POSITION	DURATION	SECTOR
+						
+						
+
+SUMMARY:
+
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+NUMBER OF BORDER MIGRANTS
+EMPLOYED			
+	TOTAL			
+ 
+
+LABOUR EMIGRATION
 g. NIGERIA CITIZENS EMPLOYED ABROAD:
-S/N | NAME | GENDER | DESTINATION | POSITION | DURATION | SECTOR
-----------------------------------------------------------------
-    |      |        |             |          |          |
-----------------------------------------------------------------
 
-H. NIGERIANS DEPARTING FOR EMPLOYMENT ABROAD:
-S/N | NAME | GENDER | DESTINATION | POSITION | DURATION | SECTOR
-----------------------------------------------------------------
-    |      |        |             |          |          |
-----------------------------------------------------------------
+S/N	NAME	GRNDER	DESTINATION COUNTRY	POSITION	DURATION	SECTOR
+						
+						
+						
 
-14. [RESERVED]
+SUMMARY:
 
-15. INVESTIGATION AND COMPLIANCE:
-S/N | ACTIVITIES                  | NUMBER | REMARK
----------------------------------------------------
-1.  | Cases involving Companies   |        |
-2.  | Cases involving Expatriates |        |
-3.  | Cases involving officers    |        |
----------------------------------------------------
 
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+NIGERIA CITIZENS EMPLOYED
+ABROAD			
+	TOTAL			
+ 
+
+H. NIGERIANS DEPARTING FOR EMPLOYMENT ABROAD
+
+
+S/N	NAME	GRNDER	DESTINATION
+COUNTRY	POSITION	DURATION	SECTOR
+						
+						
+						
+
+SUMMARY:
+
+
+S/N	CATEGORY	MALE	FEMALE	TOTAL
+1.	
+NIGERIANS DEPARTING FOR EMPLOYMENT
+ABROAD			
+	TOTAL			
+14.
+15.INVESTIGATION AND COMPLIANCE:
+
+S/N	ACTIVITIES	NUMBER	REMARK
+1.	Cases involving Companies		
+2.	Cases involving Expatriates		
+3.	Cases involving officers		
+ 
 16. REFUGEE/ASYLUM SEEKERS:
-S/N | ACTIVITIES                  | NUMBER | REMARK
----------------------------------------------------
-1.  | Applications                |        |
-2.  | Approved                    |        |
-3.  | Rejected                    |        |
----------------------------------------------------
 
-17. DEPORTATION/REPATRIATION/REFUSED ENTRY/DEPARTURE:
+S/N	ACTIVITIES	NUMBER	REMARK
+1.	No. of Asylum Seekes/Refugee applications		
+2.	No. of Asylum Seekers/Refugee approved		
+3.	No. of Asylum Seekers/Refugee Rejected		
 
-NIGERIANS DEPORTED FROM ABROAD:
-S/N | STATE OF ORIGIN | MALE | FEMALE | TOTAL
----------------------------------------------
-    |                 |      |        |
----------------------------------------------
 
-NIGERIANS REPATRIATED FROM ABROAD:
-[Enter Data]
 
-NIGERIANS REFUSED ENTRY ABROAD (RETURNEES):
-[Enter Data]
+17.DEPORTATION/REPATRIATION/REFUSED ENTRY/DEPARTURE (AIR,LAND AND SEA):
+COMMAND/FORMATION:
+CONTROL POST:
+PERIOD OF RETURNS: ${date}
 
-MIGRANTS DEPORTED FROM NIGERIA:
-S/N | NATIONALITY | MALE | FEMALE | TOTAL
------------------------------------------
-    |             |      |        |
------------------------------------------
 
-MIGRANTS REFUSED ENTRY/ADMISSION INTO NIGERIA:
-[Enter Data]
 
-18. MIGRANT E-REGISTRATION:
-S/N | NATIONALITY | SEX (M/F) | MIGRANT STATUS (Employed/Student/Self/Spouse/Dep/Reg/Irreg)
----------------------------------------------------------------------------------------------
-    |             |           |
----------------------------------------------------------------------------------------------
-TOTAL:`;
+
+NIGERIANS DEPORTED FROM ABROAD
+S/N	STATE OF ORIGIN	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+ 
+
+
+
+NIGERIANS REPATRIATED FROM ABROAD
+S/N	STATE OF ORIGIN	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+
+
+
+NIGERIANS REFUSED ENTRY ABROAD (RETURNEES)
+S/N	STATE OF ORIGIN	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+
+
+
+NIGERIANS REFUSED DEPARTURE
+S/N	STATE OF ORIGIN	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+ 
+
+
+
+MIGRANTS DEPORTED FROM NIGERIA
+S/N	NATIONALITY	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+
+
+
+MIGRANTS REPATRIATED FROM NIGERIA
+S/N	NATIONALITY	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+
+
+
+MIGRANTS REFUSED ENTRY/ADMISSION INTO NIGERIA
+S/N	NATIONALITY	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+ 
+
+
+
+STOWAWAYS
+S/N	NATIONALITY	MALE	FEMALE	TOTAL
+				
+				
+				
+				
+				
+				
+	TOTAL			
+
+18.MIGRANT E-REGISTRATION
+COMMAND/FORMATION:
+PERIOD OF RETURNS: ${date} 
+
+
+
+S/N	NATIONALITY	SEX	MIGRANT STATUS
+		M	F	TOTAL	EMPLOY
+ED	STUDENT	SELF
+EMPLOYED	SPOUSE OF NIGERIAN	DEPENDA NT	REGULA R	IRREGU LAR
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+	TOTAL										
+ 
+GENERAL REPORT
+i.	Security Report
+ii.	Other Reports	Pictures can be attached & clearly labeled or explained
+iii.	Challenges
+iv.	Recommendations/way forward.
+V.	Conclusion.
+NAME AND SIGNATURE OF THE REPORTING OFFICER:
+SIGNATURE:
+NAME:--
+RANK:
+GSM NUMBER: `;
 }

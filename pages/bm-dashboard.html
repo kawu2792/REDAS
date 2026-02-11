@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Management (BM) Dashboard - NIS REDAS</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/print.css" media="print">
+    <style>
+        /* BM-specific color scheme */
+        .top-nav { background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%); }
+        .stat-primary .stat-icon { background: linear-gradient(135deg, #7c2d12, #9a3412); }
+        .nav-item.active { background: rgba(124, 45, 18, 0.08); color: #7c2d12; }
+        .nav-item.active::before { background: #7c2d12; }
+        .btn-primary { background: linear-gradient(135deg, #7c2d12, #9a3412); border: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, #9a3412, #7c2d12); }
+        .form-section-title { font-size: 1.1rem; font-weight: 700; color: #4a5568; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; }
+    </style>
+</head>
+
+<body class="dashboard-body">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="container-fluid">
+            <div class="nav-wrapper">
+                <div class="nav-left">
+                    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <a href="hq-dashboard.html" class="nav-logo">
+                        <img src="../assets/images/nis-logo.png" alt="NIS Logo">
+                    </a>
+                    <h1 class="nav-brand">NIS REDAS</h1>
+                    <span class="system-status">
+                        <span class="status-dot"></span>
+                        Operational
+                    </span>
+                </div>
+                <div class="nav-right">
+                    <button class="nav-icon-btn" title="Notifications" aria-label="Notifications">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge">8</span>
+                    </button>
+                    <div class="user-menu" role="button" tabindex="0" aria-label="User menu" onclick="window.location.href='user-profile.html'">
+                        <div class="user-avatar">BM</div>
+                        <div class="user-details">
+                            <span class="user-name">Border Management</span>
+                            <span class="user-role">Supervisor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <a href="hq-dashboard.html" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to HQ Dashboard</span>
+                </a>
+                
+                <div class="nav-item-dropdown">
+                    <a href="#" class="nav-item dropdown-toggle">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        <span>Directorates</span>
+                        <svg class="chevron ms-auto" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu-nav">
+                        <a href="hrm-dashboard.html" class="nav-item">
+                            <span>Human Resources</span>
+                        </a>
+                        <a href="fa-dashboard.html" class="nav-item">
+                            <span>Finance & Accounts</span>
+                        </a>
+                        <a href="prs-dashboard.html" class="nav-item">
+                            <span>Planning & Research</span>
+                        </a>
+                        <a href="potd-dashboard.html" class="nav-item">
+                            <span>Passport & Travel Docs</span>
+                        </a>
+                        <a href="ic-dashboard.html" class="nav-item">
+                            <span>Investigation</span>
+                        </a>
+                        <a href="bm-dashboard.html" class="nav-item">
+                            <span>Border Management</span>
+                        </a>
+                        <a href="migration-dashboard.html" class="nav-item">
+                            <span>Migration</span>
+                        </a>
+                        <a href="vr-dashboard.html" class="nav-item">
+                            <span>Visa & Residency</span>
+                        </a>
+                        <a href="ict-cs-dashboard.html" class="nav-item">
+                            <span>ICT & Cyber Security</span>
+                        </a>
+                        <a href="wl-dashboard.html" class="nav-item">
+                            <span>Works & Logistics</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-divider"></div>
+                <div class="nav-section-title">OFFICER MENU</div>
+
+                <a href="#report-submission" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Report Submission</span>
+                </a>
+                <a href="my-reports.html" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>My Reports</span>
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-section-title">SUPERVISOR MENU</div>
+
+                <a href="bm-dashboard.html" class="nav-item active">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span>Dashboard Overview</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <span>Approvals</span>
+                    <span class="badge-count">13</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span>Border Security</span>
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-section-title">ADMINISTRATION</div>
+
+                <a href="user-management.html" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span>User Management</span>
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="#" class="nav-item" onclick="logout()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid">
+                <!-- Landing Page Intro -->
+                <div class="section-card">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h2 class="section-title">Border Management Directorate</h2>
+                            <p class="mb-4">Manage border security, patrol activities, and oversee approvals for all border-related operations within the Nigeria Immigration Service.</p>
+                            <div class="hero-actions">
+                                <a href="#report-submission" class="btn btn-primary">Submit Border Report</a>
+                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bmReportModal">View Report Template</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="text-center">
+                                <svg width="120" height="120" fill="none" stroke="#7c2d12" viewBox="0 0 24 24" style="opacity: 0.5;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Dashboard: Report Submission -->
+                <div class="section-card">
+                    <h3 class="section-title">Submit Your Border Reports</h3>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="stat-card stat-primary">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Monthly</div>
+                                    <div class="stat-label">Due: 30th</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card stat-success">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Quarterly</div>
+                                    <div class="stat-label">Due: Q4 End</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card stat-warning">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Bi-Annual</div>
+                                    <div class="stat-label">Due: June/Dec</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card stat-danger">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Annual</div>
+                                    <div class="stat-label">Due: Dec 31</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supervisor Dashboard: Approval Queue -->
+                <div class="section-card">
+                    <h3 class="section-title">Supervisor Approvals</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Report Type</th>
+                                    <th>Submitted By</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Monthly Security Report</td>
+                                    <td>Isaac Newton</td>
+                                    <td>2023-10-15</td>
+                                    <td><span class="badge badge-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn-icon" aria-label="Approve report">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button class="btn-icon btn-icon-danger" aria-label="Reject report">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Quarterly Border Patrol</td>
+                                    <td>Jack Wilson</td>
+                                    <td>2023-09-30</td>
+                                    <td><span class="badge badge-success">Approved</span></td>
+                                    <td>View Details</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section-card" id="report-submission">
+                    <div class="text-center mb-4">
+                        <h2 class="section-title mb-1">NIGERIA IMMIGRATION SERVICE</h2>
+                        <h3 class="h5 text-muted">BORDER MANAGEMENT REPORTING DASHBOARD</h3>
+                        <p class="small text-secondary">Monthly • Quarterly • Bi-Annual Report</p>
+                    </div>
+
+                    <form>
+                        <!-- Period -->
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-6">
+                                <label class="form-label">Period of Return</label>
+                                <input type="text" class="form-control" placeholder="e.g., January 2026">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Command</label>
+                                <input type="text" class="form-control" placeholder="e.g., Seme Border Command">
+                            </div>
+                        </div>
+
+                        <!-- Border Patrol Activities -->
+                        <h4 class="form-section-title">Border Patrol Activities</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Patrols Conducted</td><td><input type="number" class="form-control form-control-sm"></td></tr>
+                                    <tr><td>Arrests Made</td><td><input type="number" class="form-control form-control-sm"></td></tr>
+                                    <tr><td>Seizures</td><td><input type="number" class="form-control form-control-sm"></td></tr>
+                                    <tr><td>Items Recovered</td><td><input type="number" class="form-control form-control-sm"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- General Report -->
+                        <h4 class="form-section-title">General Report</h4>
+                        <div class="mb-3">
+                            <label class="form-label">Summary of Operations</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Challenges Encountered</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label">Recommendations</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <!-- Officer Details -->
+                        <h4 class="form-section-title">Officer Details</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Rank</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2">Save Draft</button>
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Report Template Modal -->
+    <div class="modal fade" id="bmReportModal" tabindex="-1" aria-labelledby="bmReportModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bmReportModalLabel">Border Management Reporting Template</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="section-card">
+                    <div class="report-header">
+                        <h1 class="report-title">NIGERIA IMMIGRATION SERVICE</h1>
+                        <h2>BORDER MANAGEMENT</h2>
+                        <h3>REPORTING TEMPLATE</h3>
+                        <p>FOR MONTHLY, QUARTERLY, BI-ANNUAL AND ANNUAL REPORT</p>
+                    </div>
+
+                    <form id="borderReportForm">
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between mb-4">
+                            <button type="button" class="btn btn-warning" onclick="document.getElementById('borderReportForm').reset()">Clear Form</button>
+                        </div>
+
+                        <!-- Border Management Section -->
+                        <div class="mb-4">
+                            <h4 class="form-section-title">BORDER MANAGEMENT:</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">PERIOD OF RETURN:</label>
+                                    <input type="text" class="form-control" name="periodOfReturn" placeholder="e.g., January 2024">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">DIRECTORATE PERSONNEL STRENGTH:</label>
+                                    <small class="text-muted d-block">(Current nominal roll to be attached)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personnel Strength Table -->
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Cadre</th>
+                                        <th>NUMBER</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Compt.Cadre</td><td><input type="number" class="form-control" name="comptCadre"></td></tr>
+                                    <tr><td>Superintendent Cadre</td><td><input type="number" class="form-control" name="superintendentCadre"></td></tr>
+                                    <tr><td>Inspectorate Cadre</td><td><input type="number" class="form-control" name="inspectorateCadre"></td></tr>
+                                    <tr><td>Assistant Cadre</td><td><input type="number" class="form-control" name="assistantCadre"></td></tr>
+                                    <tr><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" name="totalPersonnel"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Section 1: Arrival/Departure by Land -->
+                        <h4 class="form-section-title">1. ARRIVAL/DEPARTURE OF PASSENGERS THROUGH NIGERIAN BORDERS BY LAND</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th rowspan="2">STATE</th>
+                                        <th rowspan="2">S/N</th>
+                                        <th rowspan="2">Control Post</th>
+                                        <th colspan="3">ARRIVAL</th>
+                                        <th colspan="3">DEPARTURE</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Male</th>
+                                        <th>Female</th>
+                                        <th>Total</th>
+                                        <th>Male</th>
+                                        <th>Female</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- SOKOTO -->
+                                    <tr><td rowspan="4">SOKOTO</td><td>1.</td><td>Illela</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Gada</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Sobon Birni</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Tangaza</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- KEBBI -->
+                                    <tr><td rowspan="5">KEBBI</td><td>1.</td><td>Kamba</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kangiwa</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Dole Kaina</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Lollo</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Bagudo (Maje,Tsamiya)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- ZAMFARA -->
+                                    <tr><td rowspan="3">ZAMFARA</td><td>1.</td><td>Gurbin Baure</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kauran Namoda</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Shinkafi</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- KATSINA -->
+                                    <tr><td rowspan="6">KATSINA</td><td>1.</td><td>Jibiya</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Dan Kama</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Kongolom</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Zangon Daura</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Mai Adua</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Babban Mutum</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- JIGAWA -->
+                                    <tr><td rowspan="3">JIGAWA</td><td>1.</td><td>Dan Gwanki</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Maigatari</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Galadi</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- YOBE -->
+                                    <tr><td rowspan="4">YOBE</td><td>1.</td><td>Machina</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Nguru</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Tulun Tuluwa</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Geidam</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- BORNO -->
+                                    <tr><td rowspan="9">BORNO</td><td>1.</td><td>Gamboru</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kirawa</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Damasak</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Baga</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Sigal</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Jilbe</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Malamfatori</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Banki</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>9.</td><td>Dutse</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- ADAMAWA -->
+                                    <tr><td rowspan="8">ADAMAWA</td><td>1.</td><td>Sahuda</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Michika</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Wuro Alhaji</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Kojoli</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Belel</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Gurin</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Wuro-Boki</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Tip San</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- TARABA -->
+                                    <tr><td rowspan="11">TARABA</td><td>1.</td><td>Gembu</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kan Iyaka</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Tamnya</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Dorofi</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Yerimaru</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Mayo Dule</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Abong</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Bissaula</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>9.</td><td>Chana</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>10.</td><td>Ndum-Yaji</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>11.</td><td>Bangdown</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- BENUE -->
+                                    <tr><td rowspan="2">BENUE</td><td>1.</td><td>Jato-Aka</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Abande</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- NIGER -->
+                                    <tr><td rowspan="1">NIGER</td><td>1.</td><td>Babana</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- KWARA -->
+                                    <tr><td rowspan="8">KWARA</td><td>1.</td><td>Chikanda</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kosu-Buso</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Okuta</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Ilesha-Baruba</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Kenu</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Kaiama</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Shiya</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Bonya-Ogamue</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- OYO -->
+                                    <tr><td rowspan="3">OYO</td><td>1.</td><td></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Okerete</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Igbokoko</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- OGUN -->
+                                    <tr><td rowspan="9">OGUN</td><td>1.</td><td>Idiroko</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Iyana-Ologo</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Ijofin</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Ijoun/Tobolo</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Ilara/Alagbe</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Idopetu</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Ohunbe/Obelle</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Agbara</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>9.</td><td>Imeko</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Section 2: Land Border Returns by Nationality -->
+                        <h4 class="form-section-title">2. LAND BORDER RETURNS BY NATIONALITY:</h4>
+                        <div class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">COMMAND/FORMATION:</label>
+                                    <input type="text" class="form-control" name="commandFormation">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">CONTROL POST:</label>
+                                    <input type="text" class="form-control" name="controlPost">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">PERIOD OF RETURNS:</label>
+                                    <input type="text" class="form-control" name="periodOfReturns">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th rowspan="2">S/N</th>
+                                        <th rowspan="2">NATIONALITY</th>
+                                        <th colspan="3">ARRIVAL</th>
+                                        <th colspan="3">DEPARTURE</th>
+                                    </tr>
+                                    <tr>
+                                        <th>MALE</th>
+                                        <th>FEMALE</th>
+                                        <th>TOTAL</th>
+                                        <th>MALE</th>
+                                        <th>FEMALE</th>
+                                        <th>TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>9.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>10.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>11.</td><td><input type="text" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="2"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Section 3: Activities at Seaport and Marine Base -->
+                        <h4 class="form-section-title">3. ACTIVITIES OF THE SERVICE AT THE SEAPORT AND MARINE BASE</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th rowspan="2">STATE</th>
+                                        <th rowspan="2">S/N</th>
+                                        <th rowspan="2">Seaport/Marine base</th>
+                                        <th colspan="2">No. of Passengers</th>
+                                        <th colspan="2">NO.OF CREW</th>
+                                        <th colspan="2">NO. OF BOAT</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ARR.</th>
+                                        <th>DEP</th>
+                                        <th>Arrival</th>
+                                        <th>Dep.</th>
+                                        <th>ARR</th>
+                                        <th>DEP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- LAGOS -->
+                                    <tr><td rowspan="7">LAGOS</td><td>1.</td><td>Tin Can Shift</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Tin Can Jetty</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Apapa Shift</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Apapa Jetty</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Ladol Free Zone</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Marine Jetty</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Badagry Patrol Base</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Snake Island Free Zone</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- DELTA -->
+                                    <tr><td rowspan="5">DELTA</td><td>1.</td><td>Sapele/Warri Jetty</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Warri Jetty</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Warri Marine Patrol Base</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Koko/Sapele Seaport</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- CROSS RIVER -->
+                                    <tr><td rowspan="1">CROSS RIVER</td><td>1.</td><td>Calabar Marine Patrol Unit</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- RIVERS -->
+                                    <tr><td rowspan="3">RIVER</td><td>1.</td><td>NPA Control Post</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Onne Seaport</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>NPA Jetty</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- ONDO -->
+                                    <tr><td rowspan="1">ONDO</td><td>1.</td><td>IGBOKODA</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- ADAMAWA -->
+                                    <tr><td rowspan="1">ADAMAWA</td><td>1.</td><td>Adamawa Marine Patrol Unit</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-.
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="window.print()">Print Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/dashboard.js"></script>
+</body>
+
+</html>

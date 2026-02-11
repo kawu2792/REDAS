@@ -1,1013 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Directorate - REDAS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorate - Border Management - NIS REDAS</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="nis.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/print.css">
     <style>
-        @media print {
-            body { background-color: #fff !important; }
-            #sidebar-wrapper, .navbar, footer, .no-print, #action-buttons { display: none !important; }
-            #wrapper { display: block; }
-            #page-content-wrapper { margin: 0; width: 100%; }
-            .container-fluid { padding: 0 !important; }
-            .card { border: none !important; box-shadow: none !important; }
-            .bg-white { background-color: #fff !important; }
-            /* Ensure inputs are visible */
-            input, textarea, select { border: 1px solid #ccc !important; }
-        }
+        /* BM-specific color scheme */
+        .top-nav { background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%); }
+        .btn-primary { background: linear-gradient(135deg, #7c2d12, #9a3412); border: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, #9a3412, #7c2d12); }
+        .nav-item.active { background: rgba(124, 45, 18, 0.08); color: #7c2d12; }
+        .nav-item.active::before { background: #7c2d12; }
+
+        .form-section-title { font-size: 1.1rem; font-weight: 700; color: #4a5568; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; }
+        .report-header { text-align: center; margin-bottom: 2rem; }
+        .report-title { font-size: 1.5rem; font-weight: bold; }
+        .table input { width: 100%; border: none; text-align: center; }
+        .table input:focus { outline: none; box-shadow: none; }
     </style>
-</head>
-<body class="bg-gray-50">
-
-    <!-- Fixed NIS Logo -->
-    <div style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
-        <img src="../assets/images/nis.png" alt="NIS Logo" style="height: 40px;">
-    </div>
-
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        <div class="bg-white border-end" id="sidebar-wrapper" style="width: 250px;">
-            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
-                <img src="../assets/images/nis.png" alt="Logo" class="me-2">HQ Admin
-            </div>
-            <div class="list-group list-group-flush my-3">
-                <a href="dashboard-hq.html" class="list-group-item list-group-item-action bg-transparent second-text">
-                    <i class="fas fa-arrow-left me-2"></i>Back to HQ
-                </a>
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text active">
-                    <i class="fas fa-building me-2"></i>Directorate View
-                </a>
-                
-                <!-- Dark Mode Toggle -->
-                <div class="list-group-item bg-transparent mt-4 border-top">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="darkModeSwitch">
-                        <label class="form-check-label second-text small" for="darkModeSwitch">Dark Mode</label>
-                    </div>
-                </div>
-
-                <a href="#" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold mt-2" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                    <i class="fas fa-power-off me-2"></i>Logout
-                </a>
-            </div>
-        </div>
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper" class="w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 px-4 border-bottom">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                    <h2 class="fs-2 m-0" id="directorate-title">Directorate</h2>
-                </div>
-                <div class="ms-auto d-flex align-items-center">
-                    <span class="text-muted me-3">Service Headquarters</span>
-                </div>
-            </nav>
-
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" class="bg-light py-2 px-4 border-bottom">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="dashboard-hq.html" class="text-decoration-none">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Directorate</li>
-                </ol>
-            </nav>
-
-            <div class="container-fluid px-4">
-                <div class="row my-4">
-                    <div class="col-md-12">
-                        <div class="bg-white shadow-sm rounded p-5 text-center">
-                            <i class="fas fa-folder-open fa-4x text-success mb-3"></i>
-                            <h3 class="fw-bold" id="directorate-header">Directorate Dashboard</h3>
-                            <p class="text-muted lead">Manage files, reports, and personnel for this directorate.</p>
-                            <hr class="my-4">
-                            <div class="d-flex justify-content-center gap-3" id="action-buttons">
-                                <button class="btn btn-success"><i class="fas fa-file-upload me-2"></i>Upload Report</button>
-                                <button class="btn btn-primary"><i class="fas fa-search me-2"></i>Search Records</button>
-                                <button class="btn btn-outline-secondary"><i class="fas fa-users me-2"></i>View Staff</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="bg-white text-center py-4 border-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <p class="mb-0 text-muted small">&copy; 2026 Nigeria Immigration Service. All Rights Reserved.</p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-
-            <!-- Return to Landing Page -->
-            <footer class="bg-light text-center py-3 mt-auto">
-                <a href="../index.html" class="text-decoration-none text-muted"><i class="fas fa-arrow-left me-2"></i>Back to Landing Page</a>
-            </footer>
-        </div>
-    </div>
-
-    <!-- Back to Top Button -->
-    <button id="back-to-top" class="btn btn-primary btn-lg rounded-circle shadow">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <!-- Session Warning Modal -->
-    <div class="modal fade" id="sessionWarningModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-warning">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Session Expiring Soon</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Your session will expire in 1 minute due to inactivity. Please click "Stay Logged In" to continue working.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">Stay Logged In</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Logout Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirm Logout</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to log out of the system?</p>
-                    <div class="progress mt-3" style="height: 5px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="../index.html" class="btn btn-danger">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/app.js"></script>
     <script>
-        // Dynamic Title Logic
         document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            const directorates = {
-                'hrm': 'Human Resources Management (HRM)',
-                'fa': 'Finance and Accounts (F/A)',
-                'bm': 'Border Management (BM)',
-                'mg': 'Migration (MG)',
-                'potd': 'Passport & Other Travel Docs (POTD)',
-                'vr': 'Visa & Residency (V/R)',
-                'prs': 'Planning, Research & Statistics (PRS)',
-                'ic': 'Investigation & Compliance (I/C)',
-                'ict': 'ICT & CyberSecurity (ICT/SC)',
-                'wl': 'Works & Logistics (W/L)'
-            };
-            
-            const title = directorates[id] || 'Directorate Dashboard';
-            document.getElementById('directorate-title').innerText = title;
-            document.getElementById('directorate-header').innerText = title;
-
-            // Inject PRS specific button if applicable
-            if (id === 'prs') {
-                const container = document.getElementById('action-buttons');
-                const btn = document.createElement('a');
-                btn.href = 'prs-reports.html';
-                btn.className = 'btn btn-warning text-dark fw-bold';
-                btn.innerHTML = '<i class="fas fa-inbox me-2"></i>Manage Zonal Reports';
-                container.appendChild(btn);
-            }
-
-            // Inject HRM reporting template if applicable
-            if (id === 'hrm') {
-                const mainContent = document.querySelector('.container-fluid.px-4');
-                mainContent.innerHTML = `
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="bg-white shadow-sm rounded p-5">
-                                <form id="hrmReportForm" class="needs-validation" novalidate>
-                                <h1 class="text-center mb-4">NIGERIA IMMIGRATION SERVICE</h1>
-                                <h2 class="text-center mb-4">HUMAN RESOURCES MANAGEMENT</h2>
-                                <h3 class="text-center mb-4">REPORTING TEMPLATE</h3>
-                                <h4 class="text-center mb-4">FOR MONTHLY, QUARTERLY, AND BI-ANNUAL REPORT</h4>
-                                <hr>
-                                <div class="mb-4">
-                                    <label for="period-return" class="form-label fw-bold">PERIOD OF RETURN:</label>
-                                    <input type="text" class="form-control" id="period-return" placeholder="Enter period of return">
-                                </div>
-
-                                <h5 class="fw-bold">I. DIRECTORATE PERSONNEL STRENGHT (CURRENT NOMINAL ROLL TO BE ATTACHED)</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>Cadres</th>
-                                            <th>Number</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Comptroller</td>
-                                            <td><input type="number" class="form-control personnel-input" min="1" max="20"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Superintendent</td>
-                                            <td><input type="number" class="form-control personnel-input" min="1" max="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Inspectorate</td>
-                                            <td><input type="number" class="form-control personnel-input" min="1" max="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Assistant</td>
-                                            <td><input type="number" class="form-control personnel-input" min="1" max="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total</strong></td>
-                                            <td><input type="number" class="form-control" id="personnel-total" readonly></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <div class="row mb-5 no-print">
-                                    <div class="col-md-6 mx-auto">
-                                        <canvas id="personnelChart"></canvas>
-                                    </div>
-                                </div>
-
-                                <h5 class="fw-bold">II. SERVICE STRENGHT (TO BE ACCOMPANIED WITH DETAIL, THAT IS SOFT COPY):</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>RANK</th>
-                                            <th>Number</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>Comptroller General CGI</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>2</td><td>Deputy Comptroller General DCG</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>3</td><td>Assistant Comptroller General ACG</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>4</td><td>Comptroller of Immigration CIS</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>5</td><td>Deputy Comptroller of Immigration DCI</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>6</td><td>Assistant Comptroller of Immigration ACI</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>7</td><td>Chief Superintendent of Immigration CSI</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>8</td><td>Superintendent of Immigration SI</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>9</td><td>Deputy Superintendent of Immigration DSI</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>10</td><td>Assistant Superintendent of Immigration ASI1</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>11</td><td>Assistant Superintendent of Immigration ASI2</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>12</td><td>Inspectorate of Immigration II</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>13</td><td>Assistant Inspectorate AII</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>14</td><td>Chief Immigration Assistant (CIA)</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>15</td><td>Immigration Assistant one IA1</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>16</td><td>Immigration Assistant two IA2</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td>17</td><td>Immigration Assistant three IA3</td><td><input type="number" class="form-control service-input"></td></tr>
-                                        <tr><td></td><td><strong>Total</strong></td><td><input type="number" class="form-control" id="service-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-                                <p class="text-muted">Note: to be accompanied with detail, that is soft copy.</p>
-
-                                <h5 class="fw-bold">A RECORD UNIT (ACTIVITES):</h5>
-                                <ul class="list-group mb-4">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">PERMISSION TO MARRY <input type="number" class="form-control w-25"></li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">CHANGE OF NAME <input type="number" class="form-control w-25"></li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">CHANGE OF NEXT OF KIN <input type="number" class="form-control w-25"></li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">CHANGE OF STATE OF ORIGIN <input type="number" class="form-control w-25"></li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">UPDATING OF RECORDS <input type="number" class="form-control w-25"></li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">NYSC MATTERS FROM COMMANDS <input type="number" class="form-control w-25"></li>
-                                </ul>
-
-                                <h5 class="fw-bold">A. REGISTRY (ACTIVITIES)</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>ACTIVITIES</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>INCOMING PERSONAL MAILS</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td>2</td><td>OUTGOING MAILS</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td>3</td><td>INCOMING POLICY MAILS</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td>4</td><td>PENDING MAILS</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td>5</td><td>OUTGOING PERSONAL FILES</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td>6</td><td>INCOMING POLICY FILES</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td>7</td><td>OUTGOING POLICY FILES</td><td><input type="number" class="form-control registry-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="registry-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">B) RECRUITMENT (IF ANY)</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>RANK</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>SUPERINTENDENT OF IMMIGRATION (SI)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>2</td><td>Deputy Superintendent of Immigration (DSI)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>3</td><td>Assistant Superintendent of Immigration one (ASI1)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>4</td><td>Assistant SUPERINTENDENT of Immigration 2 (ASI2)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>5</td><td>Inspector Of Immigration (II)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>6</td><td>Assistant Inspector of Immigration (AII)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>7</td><td>Chief immigration Assistant (CIA)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>8</td><td>Immigration Assistant one (IA1)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>9</td><td>Immigration Assistant two (IA2)</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>10</td><td>Immigration Assistant three (IA3)</td><td><input type="number" class="form-control"></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">C) CAREER PROGRESSION</h5>
-                                <h6>OFFICER PROMOTION:</h6>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>POSITION</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>ACG-DCG</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>2</td><td>CIS-ACG</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>3</td><td>DCI-CIS</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>4</td><td>ACI-DCI</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>5</td><td>CSI-ACI</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>6</td><td>SI-CSI</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>7</td><td>DSI-CSI</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>8</td><td>ASI1-DSI</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td>9</td><td>ASI2-ASI1</td><td><input type="number" class="form-control promotion-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="promotion-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">II. UPGRADING AND CONVERSION</h5>
-                                <h6>CONVERSION:</h6>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>RANK</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>II-ASI2</td><td><input type="number" class="form-control conversion-input"></td></tr>
-                                        <tr><td>2</td><td>AII-II</td><td><input type="number" class="form-control conversion-input"></td></tr>
-                                        <tr><td>3</td><td>CIA-II</td><td><input type="number" class="form-control conversion-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="conversion-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h6>IIII. UPGRADING:</h6>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>RANK</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>INSPECTOR OF IMMIGRATION (II)</td><td><input type="number" class="form-control upgrading-input"></td></tr>
-                                        <tr><td>2</td><td>ASSISTANT INSPECTOR OF IMMIGRATION (AII)</td><td><input type="number" class="form-control upgrading-input"></td></tr>
-                                        <tr><td>3</td><td>CHIEF IMMIGRATION ASSISTANT (CIA)</td><td><input type="number" class="form-control upgrading-input"></td></tr>
-                                        <tr><td>4</td><td>IMMIGRATION ASSISTANT ONE (IA1)</td><td><input type="number" class="form-control upgrading-input"></td></tr>
-                                        <tr><td>5</td><td>IMMIGRATION ASSISTANT TWO (IA2)</td><td><input type="number" class="form-control upgrading-input"></td></tr>
-                                        <tr><td>6</td><td>IMMIGRATION ASSISTANT THREE (IA3)</td><td><input type="number" class="form-control upgrading-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="upgrading-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">IV. PROMOTION/ELIGIBILITY</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>RANK</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>CIS-ACG</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>2</td><td>DCI-CIS</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>3</td><td>ACI-DCI</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>4</td><td>CSI-ACI</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>5</td><td>SI-CSI</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>6</td><td>DSI-SI</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>7</td><td>ASI1-DSI</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>8</td><td>ASI2-ASI1</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td>9</td><td>II-ASI1</td><td><input type="number" class="form-control eligibility-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="eligibility-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">V. TRAINING AND STAFF DEVELOPMENT</h5>
-                                <h6>TRIANING:</h6>
-                                <table class="table table-bordered mb-4" id="training-table">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>NAME OF THE COURSE</th>
-                                            <th>DURATION</th>
-                                            <th>NUMBER OF PARTICIPANTS</th>
-                                            <th>REMARK</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>I</td>
-                                            <td>COMMAND COURSE IN SOKOTO</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control training-participants"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>II</td>
-                                            <td>STAFF COURSE IN SOKOTO</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control training-participants"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>III</td>
-                                            <td>IMMIGRATION TRAINING SCHOOL KANO (ITSK)</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control training-participants"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>IV</td>
-                                            <td>CONVERTED/UPGRADED COURSE</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control training-participants"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>V</td>
-                                            <td>NIGERIA IMMIGRATION TRAINING SCHOOL ORLU (NITSOL)</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control training-participants"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>VI</td>
-                                            <td>PREBASIC COURSE IN NIGERIA IMMIGRATION TRAINING SCHOOL AHOADA (NITSA)</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control training-participants"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td><strong>TOTAL</strong></td>
-                                            <td></td>
-                                            <td><input type="number" class="form-control" id="training-total" readonly></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <button class="btn btn-secondary mb-3" onclick="addTrainingRow()">Add More Training</button>
-
-                                <h6>VII. COURSES ATTENDED IN SISTER TRAINING INSTITUTIONS</h6>
-                                <table class="table table-bordered mb-4" id="sister-training-table">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>COURSE TITLE</th>
-                                            <th>LOCATION</th>
-                                            <th>NUMBER OF TRAINED</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control sister-trained"></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td><strong>TOTAL</strong></td>
-                                            <td></td>
-                                            <td><input type="number" class="form-control" id="sister-total" readonly></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <button class="btn btn-secondary mb-3" onclick="addSisterTrainingRow()">Add More Sister Training</button>
-
-                                <h6>VIII. OVERSEA TRAINING</h6>
-                                <table class="table table-bordered mb-4" id="oversea-training-table">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>COURSE TITLE</th>
-                                            <th>LOCATION</th>
-                                            <th>NUMBER OF TRAINED</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control oversea-trained"></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td><strong>TOTAL</strong></td>
-                                            <td></td>
-                                            <td><input type="number" class="form-control" id="oversea-total" readonly></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <button class="btn btn-secondary mb-3" onclick="addOverseaTrainingRow()">Add More Oversea Training</button>
-
-                                <h6>I. PERMISSION FOR STUDIES</h6>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>ACTIVITIES</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>APPLICATION RECEIVED</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>2</td><td>APPLICATION APPROVED</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>3</td><td>APPLICATION REJECTED</td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>4</td><td>APPLICATION PENDING</td><td><input type="number" class="form-control"></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h6>STAFF DEVELOPMENT:</h6>
-                                <p>THIS WILL ANALYSE ALL THE TRAINING/WORKSHOPS And SEMINARS FOR THE YEAR AND THE NUMBER OF PARTICIPANTS AND PLACE OF THE TRAINING.</p>
-                                <table class="table table-bordered mb-4" id="staff-dev-table">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>NAMES OF THE WORKSHOP/SEMINAR</th>
-                                            <th>LOCATION</th>
-                                            <th>COST IMPLICATION</th>
-                                            <th>NO OF PARTICIPANTS</th>
-                                            <th>DURATION</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control"></td>
-                                            <td><input type="number" class="form-control"></td>
-                                            <td><input type="date" class="form-control"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="text" class="form-control"></td>
-                                            <td><input type="number" class="form-control"></td>
-                                            <td><input type="number" class="form-control"></td>
-                                            <td><input type="date" class="form-control"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <button class="btn btn-secondary mb-3" onclick="addStaffDevRow()">Add More Staff Development</button>
-
-                                <h5 class="fw-bold">WELFARE:</h5>
-                                <p>PROVIDER ROOM FOR UPLOADING RECORDS AGAINS EACH OF THE FOLLOWING</p>
-                                <div class="mb-4">
-                                    <label>RESIDENTIAL ACCOMMODATION</label>
-                                    <input type="file" class="form-control mb-2">
-                                    <label>NIS GUEST HOUSE</label>
-                                    <input type="file" class="form-control mb-2">
-                                    <label>INSURANCE</label>
-                                    <input type="file" class="form-control mb-2">
-                                    <label>NIGERIA SOCIAL INSURANCE TRUST FUND (NSIF)</label>
-                                    <input type="file" class="form-control mb-2">
-                                    <label>HEALTH SERVICES</label>
-                                    <input type="file" class="form-control mb-2">
-                                </div>
-
-                                <h5 class="fw-bold">PENSION:</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>RANK</th>
-                                            <th>DEATH</th>
-                                            <th>MANDATORY RETIREMENT</th>
-                                            <th>VOLUNTARY RETIREMENT</th>
-                                            <th>RESIGNATION</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>COMPTROLLER GENERAL (CGIS)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>2</td><td>DEPUTY COMPTROLLER GENERAL (DCG)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>3</td><td>ASSISTANT COMTROLLER GENERAL (ACG)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>4</td><td>COMPTROLLER OF IMMIGRATION (CIS)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>5</td><td>DEPUTY COMPTROLLER OF IMMIGRATION (DCI)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>6</td><td>ASSISTANT COMPTROLLER OF IMMIGRATION (ACI)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>7</td><td>CHIEF SUPERINTENDENT OF IMMIGRATION (CSI)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>8</td><td>SUPERINTENDENT OF IMMIGRATION (SI)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>9</td><td>DEPUTY SUPERINTENDENT OF IMMIGRATION (DSI)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>10</td><td>ASSITANT SUPERINTENDENT OF IMMIGRATION ONE (ASI1)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>11</td><td>ASSISTANT SUPERINTENDENT OF IMMIGRATION TWO (ASI2)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>12</td><td>INSPECTOR OF IMMIGRATION (II)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>13</td><td>ASSISTANT INSPECTOR OF IMMIGRATION (AII)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>14</td><td>CHIEF IMMIGRATION ASSISTANT (CIA)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>15</td><td>IMMIGRATION ASSISTANT ONE (IA1)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>16</td><td>IMMIGRATION ASSISTANT TWO (IA2)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                        <tr><td>17</td><td>IMMIGRATION ASSISTANT THREE (IA3)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">DISCIPLINE AND AWARD (THIS WILL INCLUDE REPORT OF END OF THE YEAR, AWARD AND DISCIPLINE)</h5>
-                                <h6>I. DISCIPLINARY CASES HANDLES:</h6>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>CASES</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>DISMISSAL</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>2</td><td>SUSPENSION</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>3</td><td>TERMINATION</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>4</td><td>ON-GOING CASES</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>5</td><td>SALARY STOPPED</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>6</td><td>QUERIES</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>7</td><td>WARNED</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>8</td><td>DE-RANKED</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>9</td><td>INTERDICTION</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>10</td><td>REINSTATEMENT</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>11</td><td>LIFTING OF SUSPENSION</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>12</td><td>PROHIBITION OF PROMOTION</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td>13</td><td>DESCHARGED</td><td><input type="number" class="form-control disciplinary-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="disciplinary-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">MEDICAL SERVICES</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>ACTIVITIES</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>HOSPITAL VISITS</td><td><input type="number" class="form-control medical-input"></td></tr>
-                                        <tr><td>2</td><td>MEDICAL CHECKUPS</td><td><input type="number" class="form-control medical-input"></td></tr>
-                                        <tr><td>3</td><td>EMERGENCY CASES</td><td><input type="number" class="form-control medical-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="medical-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">IMMOWA</h5>
-                                <p>Immigration Married Women's Association activities.</p>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>ACTIVITIES</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>MEMBERSHIP REGISTRATION</td><td><input type="number" class="form-control immowa-input"></td></tr>
-                                        <tr><td>2</td><td>EVENTS ORGANIZED</td><td><input type="number" class="form-control immowa-input"></td></tr>
-                                        <tr><td>3</td><td>PARTICIPATION</td><td><input type="number" class="form-control immowa-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="immowa-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">SPORTING ACTIVITIES</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>ACTIVITIES</th>
-                                            <th>NUMBER</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>FOOTBALL MATCHES</td><td><input type="number" class="form-control sporting-input"></td></tr>
-                                        <tr><td>2</td><td>OTHER SPORTS</td><td><input type="number" class="form-control sporting-input"></td></tr>
-                                        <tr><td>3</td><td>PARTICIPANTS</td><td><input type="number" class="form-control sporting-input"></td></tr>
-                                        <tr><td></td><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" id="sporting-total" readonly></td></tr>
-                                    </tbody>
-                                </table>
-
-                                <h5 class="fw-bold">GENERAL REPORT</h5>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">I. Other Reports</label>
-                                    <textarea class="form-control" rows="3" placeholder="Additional reports..."></textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">II. Challenges</label>
-                                    <textarea class="form-control" rows="3" placeholder="Challenges faced..."></textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">III. Recommendations / Way Forward</label>
-                                    <textarea class="form-control" rows="3" placeholder="Recommendations..."></textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">IV. Conclusion</label>
-                                    <textarea class="form-control" rows="3" placeholder="Conclusion..."></textarea>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">Attach Pictures / Evidence (Optional)</label>
-                                    <input type="file" class="form-control" multiple accept="image/*,.pdf">
-                                    <div class="form-text">Pictures should be clearly labelled or explained in the report.</div>
-                                </div>
-
-                                <h5 class="fw-bold">SIGNATURE</h5>
-                                <div class="bg-light p-4 rounded border">
-                                    <h6 class="fw-bold mb-3">Reporting Officer Details</h6>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" class="form-control" required>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Rank</label>
-                                            <input type="text" class="form-control" required>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Phone Number</label>
-                                            <input type="tel" class="form-control" required>
-                                        </div>
-                                        <div class="col-12 mt-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" required id="certifyCheck">
-                                                <label class="form-check-label" for="certifyCheck">
-                                                    I certify that the information provided in this report is accurate and verified.
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mt-4 text-end no-print">
-                                    <button type="button" class="btn btn-outline-dark me-2" onclick="window.print()"><i class="fas fa-print me-2"></i>Print Report</button>
-                                    <button type="button" class="btn btn-secondary me-2">Save Draft</button>
-                                    <button type="submit" class="btn btn-success px-4"><i class="fas fa-paper-plane me-2"></i>Submit Report</button>
-                                </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            } else if (id === 'fa') {
-                const mainContent = document.querySelector('.container-fluid.px-4');
-                mainContent.innerHTML = `
-                <div class="row my-4">
-                    <div class="col-md-12">
-                        <div class="bg-white shadow-sm rounded p-5">
-                            <div class="card-header bg-success text-white text-center py-3 mb-4 rounded">
-                                <h4 class="fw-bold mb-0">NIGERIA IMMIGRATION SERVICE</h4>
-                                <h5 class="mb-0">FINANCE AND ACCOUNTS DIRECTORATE</h5>
-                                <p class="mb-0 small">REPORTING TEMPLATE FOR MONTHLY, QUARTERLY, AND BI-ANNUAL REPORT</p>
-                            </div>
-                            <form id="faReportForm" class="needs-validation" novalidate>
-                                <div class="row mb-4">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Period of Return:</label>
-                                        <input type="month" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Current Nominal Roll (Attach File):</label>
-                                        <input type="file" class="form-control" accept=".pdf,.xlsx,.docx" required>
-                                    </div>
-                                </div>
-                                <h5 class="text-primary border-bottom pb-2 mb-3">1. Directorate Personnel Strength</h5>
-                                <table class="table table-bordered align-middle mb-4">
-                                    <thead class="table-light"><tr><th>Cadres</th><th>Number</th></tr></thead>
-                                    <tbody>
-                                        <tr><td>Comptroller Cadre</td><td><select class="form-select personnel-select" id="cadre_comptroller" onchange="calculatePersonnelTotal()"></select></td></tr>
-                                        <tr><td>Superintendent Cadre</td><td><select class="form-select personnel-select" id="cadre_superintendent" onchange="calculatePersonnelTotal()"></select></td></tr>
-                                        <tr><td>Inspectorate Cadre</td><td><select class="form-select personnel-select" id="cadre_inspectorate" onchange="calculatePersonnelTotal()"></select></td></tr>
-                                        <tr><td>Assistant Cadre</td><td><select class="form-select personnel-select" id="cadre_assistant" onchange="calculatePersonnelTotal()"></select></td></tr>
-                                        <tr class="table-info fw-bold"><td>TOTAL</td><td><input type="text" id="personnel_total" class="form-control fw-bold" readonly value="0"></td></tr>
-                                    </tbody>
-                                </table>
-                                <h5 class="text-primary border-bottom pb-2 mb-3">I. Local Revenue Performance Report</h5>
-                                <table class="table table-bordered mb-4">
-                                    <thead class="table-light"><tr><th>S/N</th><th>Service and Facilities</th><th>Amount (Billions &#8358;)</th></tr></thead>
-                                    <tbody>
-                                        <tr><td>1</td><td>Passports</td><td><input type="number" step="0.01" class="form-control"></td></tr>
-                                        <tr><td>2</td><td>Residence Permit</td><td><input type="number" step="0.01" class="form-control"></td></tr>
-                                    </tbody>
-                                </table>
-                                <div class="mt-4 text-end">
-                                    <button type="submit" class="btn btn-success px-4"><i class="fas fa-paper-plane me-2"></i>Submit Report</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>`;
-                
-                initFATemplate();
-                
-                document.getElementById('faReportForm').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    if (!this.checkValidity()) {
-                        e.stopPropagation();
-                        this.classList.add('was-validated');
-                        return;
-                    }
-                    alert("Finance & Accounts Report submitted successfully to HQ!");
-                    this.reset();
-                    this.classList.remove('was-validated');
-                });
-            }
-
-                // Add Validation Logic
-                const form = document.getElementById('hrmReportForm');
-                if (form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        } else {
-                            event.preventDefault();
-                            const btn = form.querySelector('button[type="submit"]');
-                            const originalText = btn.innerHTML;
-                            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
-                            btn.disabled = true;
-                            setTimeout(() => {
-                                alert("HRM Report submitted successfully!");
-                                btn.innerHTML = originalText;
-                                btn.disabled = false;
-                                form.reset();
-                                form.classList.remove('was-validated');
-                            }, 2000);
+            const urlParams = new URLSearchParams(window.location.search);
+            const directorate = urlParams.get('id');
+            if (directorate === 'mg') {
+                fetch('migration-dashboard.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const mainContent = doc.querySelector('.main-content');
+                        if (mainContent) {
+                            document.querySelector('.main-content').innerHTML = mainContent.innerHTML;
                         }
-                        form.classList.add('was-validated');
-                    });
-                }
-
-                // Auto-Calculation Logic for HRM Tables
-                // Using event delegation to support dynamic rows
-                const calculationGroups = [
-                    { input: 'personnel-input', total: 'personnel-total' },
-                    { input: 'service-input', total: 'service-total' },
-                    { input: 'registry-input', total: 'registry-total' },
-                    { input: 'promotion-input', total: 'promotion-total' },
-                    { input: 'conversion-input', total: 'conversion-total' },
-                    { input: 'upgrading-input', total: 'upgrading-total' },
-                    { input: 'eligibility-input', total: 'eligibility-total' },
-                    { input: 'training-participants', total: 'training-total' },
-                    { input: 'sister-trained', total: 'sister-total' },
-                    { input: 'oversea-trained', total: 'oversea-total' },
-                    { input: 'disciplinary-input', total: 'disciplinary-total' },
-                    { input: 'award-input', total: 'award-total' },
-                    { input: 'medical-hospital', total: 'medical-hospital-total' },
-                    { input: 'medical-admission', total: 'medical-admission-total' },
-                    { input: 'medical-dental', total: 'medical-dental-total' },
-                    { input: 'immowa-input', total: 'immowa-total' },
-                    { input: 'sporting-input', total: 'sporting-total' }
-                ];
-
-                if (form) {
-                    form.addEventListener('input', function(e) {
-                        const target = e.target;
-                        const group = calculationGroups.find(g => target.classList.contains(g.input));
-                        
-                        if (group) {
-                            const inputs = document.querySelectorAll('.' + group.input);
-                            let sum = 0;
-                            inputs.forEach(input => sum += Number(input.value) || 0);
-                            const totalField = document.getElementById(group.total);
-                            if (totalField) totalField.value = sum;
-
-                            // Update chart if personnel
-                            if (group.input === 'personnel-input' && typeof updatePersonnelChart === 'function') {
-                                updatePersonnelChart();
-                            }
+                    })
+                    .catch(error => console.error('Error loading migration dashboard:', error));
+            } else if (directorate === 'vr') {
+                // Update title and user info for VR
+                document.title = 'Directorate - Visa & Residency - NIS REDAS';
+                document.querySelector('.user-avatar').textContent = 'VR';
+                document.querySelector('.user-name').textContent = 'Visa & Residence';
+                // Apply VR-specific styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    .top-nav { background: linear-gradient(135deg, #dc2626 0%, #7c2d12 100%); }
+                    .btn-primary { background: linear-gradient(135deg, #dc2626, #7c2d12); border: none; }
+                    .btn-primary:hover { background: linear-gradient(135deg, #7c2d12, #dc2626); }
+                    .nav-item.active { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
+                    .nav-item.active::before { background: #dc2626; }
+                `;
+                document.head.appendChild(style);
+                // Embed VR report template
+                fetch('vr-report-template.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const mainContent = doc.querySelector('.main-content');
+                        if (mainContent) {
+                            document.querySelector('.main-content').innerHTML = mainContent.innerHTML;
                         }
-                    });
-                }
-
-                // Personnel Chart Logic
-                let personnelChart = null;
-                window.updatePersonnelChart = () => {
-                    const inputs = document.querySelectorAll('.personnel-input');
-                    const data = Array.from(inputs).map(input => Number(input.value) || 0);
-                    const ctx = document.getElementById('personnelChart');
-                    
-                    if (ctx) {
-                        if (personnelChart) {
-                            personnelChart.data.datasets[0].data = data;
-                            personnelChart.update();
-                        } else {
-                            personnelChart = new Chart(ctx, {
-                                type: 'doughnut',
-                                data: {
-                                    labels: ['Comptroller', 'Superintendent', 'Inspectorate', 'Assistant'],
-                                    datasets: [{
-                                        data: data,
-                                        backgroundColor: ['#dc3545', '#ffc107', '#0d6efd', '#198754']
-                                    }]
-                                },
-                                options: { responsive: true, plugins: { title: { display: true, text: 'Personnel Distribution' } } }
-                            });
+                    })
+                    .catch(error => console.error('Error loading VR report template:', error));
+            } else if (directorate === 'ic') {
+                // Update title and user info for IC
+                document.title = 'Directorate - Investigation and Compliance - NIS REDAS';
+                document.querySelector('.user-avatar').textContent = 'IC';
+                document.querySelector('.user-name').textContent = 'Investigation and Compliance';
+                // Apply IC-specific styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    .top-nav { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); }
+                    .btn-primary { background: linear-gradient(135deg, #7c3aed, #a855f7); border: none; }
+                    .btn-primary:hover { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+                    .nav-item.active { background: rgba(124, 58, 237, 0.08); color: #7c3aed; }
+                    .nav-item.active::before { background: #7c3aed; }
+                `;
+                document.head.appendChild(style);
+                // Embed IC report template
+                fetch('ic-report-template.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const mainContent = doc.querySelector('.main-content');
+                        if (mainContent) {
+                            document.querySelector('.main-content').innerHTML = mainContent.innerHTML;
                         }
-                    }
-                };
-                
-                setTimeout(updatePersonnelChart, 100); // Initial render
+                        const sidebar = doc.querySelector('.sidebar');
+                        if (sidebar) {
+                            document.querySelector('.sidebar').innerHTML = sidebar.innerHTML;
+                        }
+                    })
+        .catch(error => console.error('Error loading IC report template:', error));
+} else if (directorate === 'ict') {
+    // Update title and user info for ICT
+    document.title = 'Directorate - ICT and Cyber Security - NIS REDAS';
+    document.querySelector('.user-avatar').textContent = 'ICT';
+    document.querySelector('.user-name').textContent = 'ICT and Cyber Security';
+    // Apply ICT-specific styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .top-nav { background: linear-gradient(135deg, #0f766e 0%, #134e4a 100%); }
+        .btn-primary { background: linear-gradient(135deg, #0f766e, #134e4a); border: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, #134e4a, #0f766e); }
+        .nav-item.active { background: rgba(15, 118, 110, 0.08); color: #0f766e; }
+        .nav-item.active::before { background: #0f766e; }
+    `;
+    document.head.appendChild(style);
+    // Embed ICT report template
+    fetch('ict-cs-report-template.html')
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const mainContent = doc.querySelector('.main-content');
+            if (mainContent) {
+                document.querySelector('.main-content').innerHTML = mainContent.innerHTML;
             }
+            const sidebar = doc.querySelector('.sidebar');
+            if (sidebar) {
+                document.querySelector('.sidebar').innerHTML = sidebar.innerHTML;
+            }
+        })
+        .catch(error => console.error('Error loading ICT report template:', error));
+} else if (directorate === 'wl') {
+    // Update title and user info for WL
+    document.title = 'Directorate - Works & Logistics - NIS REDAS';
+    document.querySelector('.user-avatar').textContent = 'WL';
+    document.querySelector('.user-name').textContent = 'Works & Logistics';
+    // Apply WL-specific styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .top-nav { background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%); }
+        .btn-primary { background: linear-gradient(135deg, #7c2d12, #ea580c); border: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, #ea580c, #7c2d12); }
+        .nav-item.active { background: rgba(124, 45, 18, 0.08); color: #7c2d12; }
+        .nav-item.active::before { background: #7c2d12; }
+    `;
+    document.head.appendChild(style);
+    // Embed WL report template
+    fetch('wl-report-template.html')
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const mainContent = doc.querySelector('.main-content');
+            if (mainContent) {
+                document.querySelector('.main-content').innerHTML = mainContent.innerHTML;
+            }
+            const sidebar = doc.querySelector('.sidebar');
+            if (sidebar) {
+                document.querySelector('.sidebar').innerHTML = sidebar.innerHTML;
+            }
+        })
+        .catch(error => console.error('Error loading WL report template:', error));
+} else if (directorate === 'prs') {
+    // Update title and user info for PRS
+    document.title = 'Directorate - Planning Research and Statistics - NIS REDAS';
+    document.querySelector('.user-avatar').textContent = 'PRS';
+    document.querySelector('.user-name').textContent = 'Planning Research and Statistics';
+    // Apply PRS-specific styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .top-nav { background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); }
+        .btn-primary { background: linear-gradient(135deg, #ea580c, #f97316); border: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .nav-item.active { background: rgba(234, 88, 12, 0.08); color: #ea580c; }
+        .nav-item.active::before { background: #ea580c; }
+    `;
+    document.head.appendChild(style);
+    // Embed PRS report template
+    fetch('prs-report-template.html')
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const mainContent = doc.querySelector('.main-content');
+            if (mainContent) {
+                document.querySelector('.main-content').innerHTML = mainContent.innerHTML;
+            }
+            const sidebar = doc.querySelector('.sidebar');
+            if (sidebar) {
+                document.querySelector('.sidebar').innerHTML = sidebar.innerHTML;
+            }
+        })
+        .catch(error => console.error('Error loading PRS report template:', error));
+}
         });
-
-        // Dark Mode Logic
-        const toggleSwitch = document.querySelector('#darkModeSwitch');
-        const currentTheme = localStorage.getItem('theme');
-
-        if (currentTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            toggleSwitch.checked = true;
-        }
-
-        toggleSwitch.addEventListener('change', function(e) {
-            if (e.target.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Sidebar Toggle
-        var el = document.getElementById("wrapper");
-        var toggleButton = document.getElementById("menu-toggle");
-        if (toggleButton) {
-            toggleButton.onclick = function () {
-                el.classList.toggle("toggled");
-            };
-        }
-
-        // --- Finance & Accounts Helper Functions ---
-        function initFATemplate() {
-            populateDropdown('cadre_comptroller', 20);
-            populateDropdown('cadre_superintendent', 100);
-            populateDropdown('cadre_inspectorate', 100);
-            populateDropdown('cadre_assistant', 100);
-        }
-
-        function populateDropdown(elementId, max) {
-            const select = document.getElementById(elementId);
-            if(!select) return;
-            let options = '<option value="0" selected>Select...</option>';
-            for (let i = 1; i <= max; i++) {
-                options += `<option value="${i}">${i}</option>`;
-            }
-            select.innerHTML = options;
-        }
-
-        window.calculatePersonnelTotal = function() {
-            const ids = ['cadre_comptroller', 'cadre_superintendent', 'cadre_inspectorate', 'cadre_assistant'];
-            let total = 0;
-            ids.forEach(id => {
-                const val = parseInt(document.getElementById(id).value) || 0;
-                total += val;
-            });
-            document.getElementById('personnel_total').value = total;
-        };
-
-        window.addTrainingRow = function() {
-            const table = document.getElementById('training-table').getElementsByTagName('tbody')[0];
-            const totalRowIndex = table.rows.length - 1;
-            const newRow = table.insertRow(totalRowIndex);
-            newRow.innerHTML = `
-                <td><input type="text" class="form-control" placeholder="S/N"></td>
-                <td><input type="text" class="form-control" placeholder="Course Name"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="number" class="form-control training-participants"></td>
-                <td><input type="text" class="form-control"></td>
-            `;
-        };
     </script>
-</body>
-</html>
+</head>
+
+<body class="dashboard-body">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="container-fluid">
+            <div class="nav-wrapper">
+                <div class="nav-left">
+                    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <div class="nav-logo">
+                        <img src="../assets/images/nis-logo.png" alt="NIS Logo">
+                    </div>
+                    <h1 class="nav-brand">NIS REDAS</h1>
+                </div>
+                <div class="nav-right">
+                    <div class="user-menu" role="button" tabindex="0" onclick="window.location.href='user-profile.html'">
+                        <div class="user-avatar">BM</div>
+                        <div class="user-details">
+                            <span class="user-name">Border Management</span>
+                            <span class="user-role">Officer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+     
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid">
+                <div class="section-card">
+                    <div class="report-header">
+                        <h1 class="report-title">NIGERIA IMMIGRATION SERVICE</h1>
+                        <h2>BORDER MANAGEMENT</h2>
+                        <h3>REPORTING TEMPLATE</h3>
+                        <p>FOR MONTHLY, QUARTERLY, BI-ANNUAL AND ANNUAL REPORT</p>
+                    </div>
+
+                    <form id="borderReportForm">
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between mb-4">
+                            <button type="button" class="btn btn-warning" onclick="document.getElementById('borderReportForm').reset()">Clear Form</button>
+                        </div>
+
+                        <!-- Border Management Section -->
+                        <div class="mb-4">
+                            <h4 class="form-section-title">BORDER MANAGEMENT:</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">PERIOD OF RETURN:</label>
+                                    <input type="text" class="form-control" name="periodOfReturn" placeholder="e.g., January 2024">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">DIRECTORATE PERSONNEL STRENGTH:</label>
+                                    <small class="text-muted d-block">(Current nominal roll to be attached)</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personnel Strength Table -->
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Cadre</th>
+                                        <th>NUMBER</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Compt.Cadre</td><td><input type="number" class="form-control" name="comptCadre"></td></tr>
+                                    <tr><td>Superintendent Cadre</td><td><input type="number" class="form-control" name="superintendentCadre"></td></tr>
+                                    <tr><td>Inspectorate Cadre</td><td><input type="number" class="form-control" name="inspectorateCadre"></td></tr>
+                                    <tr><td>Assistant Cadre</td><td><input type="number" class="form-control" name="assistantCadre"></td></tr>
+                                    <tr><td><strong>TOTAL</strong></td><td><input type="number" class="form-control" name="totalPersonnel"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Section 1: Arrival/Departure by Land -->
+                        <h4 class="form-section-title">1. ARRIVAL/DEPARTURE OF PASSENGERS THROUGH NIGERIAN BORDERS BY LAND</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th rowspan="2">STATE</th>
+                                        <th rowspan="2">S/N</th>
+                                        <th rowspan="2">Control Post</th>
+                                        <th colspan="3">ARRIVAL</th>
+                                        <th colspan="3">DEPARTURE</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Male</th>
+                                        <th>Female</th>
+                                        <th>Total</th>
+                                        <th>Male</th>
+                                        <th>Female</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- SOKOTO -->
+                                    <tr><td rowspan="4">SOKOTO</td><td>1.</td><td>Illela</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Gada</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Sobon Birni</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Tangaza</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- KEBBI -->
+                                    <tr><td rowspan="5">KEBBI</td><td>1.</td><td>Kamba</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kangiwa</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Dole Kaina</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Lollo</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Bagudo (Maje,Tsamiya)</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- ZAMFARA -->
+                                    <tr><td rowspan="3">ZAMFARA</td><td>1.</td><td>Gurbin Baure</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kauran Namoda</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Shinkafi</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- KATSINA -->
+                                    <tr><td rowspan="6">KATSINA</td><td>1.</td><td>Jibiya</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Dan Kama</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Kongolom</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Zangon Daura</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Mai Adua</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Babban Mutum</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- JIGAWA -->
+                                    <tr><td rowspan="3">JIGAWA</td><td>1.</td><td>Dan Gwanki</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Maigatari</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Galadi</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- YOBE -->
+                                    <tr><td rowspan="4">YOBE</td><td>1.</td><td>Machina</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Nguru</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Tulun Tuluwa</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Geidam</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- BORNO -->
+                                    <tr><td rowspan="9">BORNO</td><td>1.</td><td>Gamboru</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kirawa</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Damasak</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Baga</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Sigal</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Jilbe</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Malamfatori</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Banki</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>9.</td><td>Dutse</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- ADAMAWA -->
+                                    <tr><td rowspan="8">ADAMAWA</td><td>1.</td><td>Sahuda</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Michika</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Wuro Alhaji</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Kojoli</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Belel</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>6.</td><td>Gurin</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>7.</td><td>Wuro-Boki</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>8.</td><td>Tip San</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td colspan="3"><strong>TOTAL</strong></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <!-- TARABA -->
+                                    <tr><td rowspan="11">TARABA</td><td>1.</td><td>Gembu</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>2.</td><td>Kan Iyaka</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>3.</td><td>Tamnya</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>4.</td><td>Dorofi</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <tr><td>5.</td><td>Yerimaru</td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td><td><input type="number" class="form-control"></td></tr>
+                                    <

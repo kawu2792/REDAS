@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F-A Dashboard - NIS REDAS</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        /* FA-specific color scheme */
+        .top-nav { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+        .stat-primary .stat-icon { background: linear-gradient(135deg, #059669, #10b981); }
+        .nav-item.active { background: rgba(5, 150, 105, 0.08); color: #059669; }
+        .nav-item.active::before { background: #059669; }
+        .btn-primary { background: linear-gradient(135deg, #059669, #10b981); border: none; }
+        .btn-primary:hover { background: linear-gradient(135deg, #10b981, #059669); }
+        
+        .form-section-title { font-size: 1.1rem; font-weight: 700; color: #4a5568; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; }
+        .dark-mode .form-section-title { color: #e5e7eb; border-bottom-color: #374151; }
+        .table-sm td, .table-sm th { padding: 0.5rem; vertical-align: middle; }
+        .form-control-sm, .form-select-sm { font-size: 0.85rem; }
+        
+        /* Enhanced Header Styles */
+        .report-header { text-align: center; margin-bottom: 2.5rem; padding: 30px; background: linear-gradient(to bottom, #f0fdf4, #ffffff); border-radius: 16px; border: 1px solid #bbf7d0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .report-title { font-size: 2.5rem; font-weight: 800; color: #064e3b; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .report-subtitle { font-size: 1.5rem; font-weight: 700; color: #059669; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+        .report-meta { font-size: 1rem; color: #047857; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+
+<body class="dashboard-body">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="container-fluid">
+            <div class="nav-wrapper">
+                <div class="nav-left">
+                    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <a href="hq-dashboard.html" class="nav-logo">
+                        <img src="../assets/images/nis-logo.png" alt="NIS Logo">
+                    </a>
+                    <h1 class="nav-brand">NIS REDAS</h1>
+                    <span class="system-status">
+                        <span class="status-dot"></span>
+                        Operational
+                    </span>
+                </div>
+                <div class="nav-right">
+                    <button class="nav-icon-btn" title="Notifications" aria-label="Notifications">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge">7</span>
+                    </button>
+                    <div class="user-menu" role="button" tabindex="0" aria-label="User menu" onclick="window.location.href='user-profile.html'">
+                        <div class="user-avatar">FA</div>
+                        <div class="user-details">
+                            <span class="user-name">Finance & Accounts</span>
+                            <span class="user-role">Supervisor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <a href="hq-dashboard.html" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span>Main Dashboard</span>
+                </a>
+                <a href="fa-dashboard.html" class="nav-item active" aria-current="page">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                    </svg>
+                    <span>Budget Management</span>
+                </a>
+                <a href="#report-submission" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Report Submission</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <span>Supervisor Approvals</span>
+                    <span class="badge-count">8</span>
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-section-title">FINANCIAL REPORTS</div>
+
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <span>Monthly Financials</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Quarterly Audits</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Annual Budget</span>
+                </a>
+
+                <div class="nav-divider"></div>
+                </div>
+
+                <div class="nav-item-dropdown">
+                    <a href="#" class="nav-item dropdown-toggle">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Zonal Offices</span>
+                        <svg class="chevron ms-auto" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu-nav">
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone A - Lagos</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Lagos State Command</span></a>
+                                <a href="#" class="nav-item"><span>Ogun State Command</span></a>
+                                <a href="#" class="nav-item"><span>Seme Special Border Command</span></a>
+                                <a href="#" class="nav-item"><span>Lagos State Passport Command</span></a>
+                                <a href="#" class="nav-item"><span>Lagos Border Patrol Command</span></a>
+                                <a href="#" class="nav-item"><span>Idiroko Special Border Command</span></a>
+                                <a href="#" class="nav-item"><span>Murtala Muhammad International Airport</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone B - Kaduna</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Kaduna State Command</span></a>
+                                <a href="#" class="nav-item"><span>Sokoto State Command</span></a>
+                                <a href="#" class="nav-item"><span>Katsina State Command</span></a>
+                                <a href="#" class="nav-item"><span>Kano State Command</span></a>
+                                <a href="#" class="nav-item"><span>Jigawa State Command</span></a>
+                                <a href="#" class="nav-item"><span>Illela Special Border Command</span></a>
+                                <a href="#" class="nav-item"><span>Jibia Special Border Command</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone C - Bauchi</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Bauchi State Command</span></a>
+                                <a href="#" class="nav-item"><span>Borno State Command</span></a>
+                                <a href="#" class="nav-item"><span>Adamawa State Command</span></a>
+                                <a href="#" class="nav-item"><span>Gombe State Command</span></a>
+                                <a href="#" class="nav-item"><span>Plateau State Command</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone D - Niger</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Niger State Command</span></a>
+                                <a href="#" class="nav-item"><span>Kwara State Command</span></a>
+                                <a href="#" class="nav-item"><span>Kebbi State Command</span></a>
+                                <a href="#" class="nav-item"><span>FCT Abuja</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone E - Imo</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Imo State Command</span></a>
+                                <a href="#" class="nav-item"><span>Rivers State Command</span></a>
+                                <a href="#" class="nav-item"><span>Rivers Marine Command</span></a>
+                                <a href="#" class="nav-item"><span>Abia State Command</span></a>
+                                <a href="#" class="nav-item"><span>Ebonyi State Command</span></a>
+                                <a href="#" class="nav-item"><span>Mfum Special Border Command</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone F - Oyo</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Oyo State Command</span></a>
+                                <a href="#" class="nav-item"><span>Ekiti State Command</span></a>
+                                <a href="#" class="nav-item"><span>Ondo State Command</span></a>
+                                <a href="#" class="nav-item"><span>Osun State Command</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone G - Edo</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Edo State Command</span></a>
+                                <a href="#" class="nav-item"><span>Delta State Command</span></a>
+                                <a href="#" class="nav-item"><span>Enugu State Command</span></a>
+                                <a href="#" class="nav-item"><span>Anambra State Command</span></a>
+                                <a href="#" class="nav-item"><span>Bayelsa State Command</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-item-dropdown">
+                            <a href="#" class="nav-item dropdown-toggle">
+                                <span>Zone H - Benue</span>
+                                <svg class="chevron ms-auto" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu-nav">
+                                <a href="#" class="nav-item"><span>Benue State Command</span></a>
+                                <a href="#" class="nav-item"><span>Nasarawa State Command</span></a>
+                                <a href="#" class="nav-item"><span>Kogi State Command</span></a>
+                                <a href="#" class="nav-item"><span>Taraba State Command</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="user-management.html" class="nav-item">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span>User Management</span>
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="#" class="nav-item" onclick="logout()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid">
+                <!-- Landing Page Intro -->
+                <div class="section-card">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h2 class="section-title">Finance and Accounts Directorate</h2>
+                            <p class="mb-4">Manage financial operations, submit budget reports, and oversee approvals for all financial activities within the Nigeria Immigration Service.</p>
+                            <div class="hero-actions">
+                                <a href="#report-submission" class="btn btn-primary">Submit Financial Report</a>
+                                <button class="btn btn-secondary">View Budget Dashboard</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="text-center">
+                                <svg width="120" height="120" fill="none" stroke="#059669" viewBox="0 0 24 24" style="opacity: 0.5;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Dashboard: Report Submission -->
+                <div class="section-card">
+                    <h3 class="section-title">Submit Your Financial Reports</h3>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="stat-card stat-primary">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Monthly</div>
+                                    <div class="stat-label">Due: 30th</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card stat-success">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Quarterly</div>
+                                    <div class="stat-label">Due: Q4 End</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card stat-warning">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Bi-Annual</div>
+                                    <div class="stat-label">Due: June/Dec</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card stat-danger">
+                                <div class="stat-icon">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-value">Annual</div>
+                                    <div class="stat-label">Due: Dec 31</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supervisor Dashboard: Approval Queue -->
+                <div class="section-card">
+                    <h3 class="section-title">Supervisor Approvals</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Report Type</th>
+                                    <th>Submitted By</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Monthly Budget Report</td>
+                                    <td>Osho</td>
+                                    <td>2023-10-15</td>
+                                    <td><span class="badge badge-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn-icon" aria-label="Approve report">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                        <button class="btn-icon btn-icon-danger" aria-label="Reject report">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Quarterly Audit</td>
+                                    <td>Tope Taiwo</td>
+                                    <td>2023-09-30</td>
+                                    <td><span class="badge badge-success">Approved</span></td>
+                                    <td>View Details</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section-card" id="report-submission">
+                    <div class="report-header">
+                        <h1 class="report-title">NIGERIA IMMIGRATION SERVICE</h1>
+                        <h2 class="report-subtitle">FINANCE AND ACCOUNT REPORTING TEMPLATE</h2>
+                        <p class="report-meta">FOR MONTHLY, QUARTERLY, AND BI-ANNUAL REPORT</p>
+                    </div>
+
+                    <form>
+                        <!-- Period -->
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-6">
+                                <label class="form-label">Period of Return</label>
+                                <input type="text" class="form-control" placeholder="e.g., January 2026" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Directorate Personnel Strength</label>
+                                <input type="file" class="form-control">
+                                <div class="form-text">Current nominal roll to be attached</div>
+                            </div>
+                        </div>
+
+                        <!-- Personnel Strength -->
+                        <h4 class="form-section-title">Personnel Strength</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Cadres</th>
+                                        <th>Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="personnelTable"></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th><input type="text" class="form-control form-control-sm" readonly id="personnelTotal"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- I. Local Revenue Performance Report -->
+                        <h4 class="form-section-title">I. Local Revenue Performance Report</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Service and Facilities</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="localRevenueTable"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- II. Foreign Revenue Performance Report -->
+                        <h4 class="form-section-title">II. Foreign Revenue Performance Report</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Service Revenue Performance</th>
+                                        <th>Amounts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="foreignRevenueTable"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- Expenditure Profile -->
+                        <h4 class="form-section-title">Expenditure Profile</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Stakeholders/Service Provider</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expenditureTable"></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2" class="text-end">TOTAL</th>
+                                        <th><input type="text" class="form-control form-control-sm" readonly id="expenditureTotal"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- A. Budget and Releases -->
+                        <h4 class="form-section-title">A. Budget and Releases</h4>
+                        <div class="table-responsive mb-5">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Nature of Expenditure</th>
+                                        <th>Amount Budgeted (N)</th>
+                                        <th>Amount Released (N)</th>
+                                        <th>Percentage of Releases (%)</th>
+                                        <th>Remark</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="budgetTable"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- General Report -->
+                        <h4 class="form-section-title">General Report</h4>
+                        <div class="mb-3">
+                            <label class="form-label">I. Other Reports</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">II. Challenges</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">III. Recommendations / Way Forward</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">IV. Conclusion</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label">Attachments (Pictures/Documents)</label>
+                            <input type="file" class="form-control" multiple>
+                            <div class="form-text">Pictures can be attached and clearly labelled or explained</div>
+                        </div>
+
+                        <!-- Officer Details -->
+                        <h4 class="form-section-title">Reporting Officer</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4"><label class="form-label">Name</label><input type="text" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Rank</label><input type="text" class="form-control"></div>
+                            <div class="col-md-4"><label class="form-label">Phone Number</label><input type="text" class="form-control"></div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2">Save Draft</button>
+                            <button type="button" class="btn btn-secondary me-2" onclick="window.print()">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                </svg>
+                                Print Report
+                            </button>
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        // Helper to create dropdown options
+        function createDropdownOptions(max) {
+            let options = '<option value="">-</option>';
+            for (let i = 1; i <= max; i++) {
+                options += `<option value="${i}">${i}</option>`;
+            }
+            return options;
+        }
+
+        // 1. Personnel Strength
+        const personnelData = [
+            { cadre: "Comptroller", max: 20 },
+            { cadre: "Superintendent", max: 100 },
+            { cadre: "Inspectorate", max: 100 },
+            { cadre: "Assistant", max: 100 }
+        ];
+        const personnelTable = document.getElementById('personnelTable');
+        personnelData.forEach(p => {
+            const row = `<tr><td>${p.cadre}</td><td><select class="form-select form-select-sm personnel-select">${createDropdownOptions(p.max)}</select></td></tr>`;
+            personnelTable.insertAdjacentHTML('beforeend', row);
+        });
+
+        // 2. Local Revenue Performance
+        const localRevenueItems = [
+            "Passports",
+            "Residence Permit (ECOWAS & African Affairs)",
+            "Non-Refundable Administrative Fees for Operations",
+            "Residence Permit for Non-Africans (CERPAC)",
+            "Extension of Visitors Pass (E-Pass)",
+            "Other Revenue (IGR)"
+        ];
+        const localRevenueTable = document.getElementById('localRevenueTable');
+        localRevenueItems.forEach((item, i) => {
+            localRevenueTable.insertAdjacentHTML('beforeend', `<tr><td>${i+1}</td><td>${item}</td><td><input type="number" step="0.01" class="form-control form-control-sm"></td></tr>`);
+        });
+
+        // 3. Foreign Revenue Performance
+        const foreignRevenueItems = [
+            "Passport & Visa (Direct to JP Morgan Account)",
+            "Carrier Liability/Visa on Arrival"
+        ];
+        const foreignRevenueTable = document.getElementById('foreignRevenueTable');
+        foreignRevenueItems.forEach((item, i) => {
+            foreignRevenueTable.insertAdjacentHTML('beforeend', `<tr><td>${i+1}</td><td>${item}</td><td><input type="number" step="0.01" class="form-control form-control-sm"></td></tr>`);
+        });
+
+        // 4. Expenditure Profile
+        const expenditureItems = [
+            "IRIS Smart Technologies", "Newworks Solutions Ltd", "National e-Government Strategies",
+            "Greater Washington", "Contec (CERPAC)", "Contec (E-Pass)", "FMI (CERPAC/E-Pass)",
+            "FIRS", "NSMPC", "Sub-Treasure", "NIS (After payment to IPTELCOM)", "IPTELCOM"
+        ];
+        const expenditureTable = document.getElementById('expenditureTable');
+        expenditureItems.forEach((item, i) => {
+            expenditureTable.insertAdjacentHTML('beforeend', `<tr><td>${i+1}</td><td>${item}</td><td><input type="number" step="0.01" class="form-control form-control-sm expenditure-input"></td></tr>`);
+        });
+
+        // 5. Budget and Releases
+        const budgetItems = ["Personnel Cost", "Overhead Cost", "Capital"];
+        const budgetTable = document.getElementById('budgetTable');
+        budgetItems.forEach((item, i) => {
+            budgetTable.insertAdjacentHTML('beforeend', `<tr>
+                <td>${i+1}</td>
+                <td>${item}</td>
+                <td><input type="number" step="0.01" class="form-control form-control-sm budget-input"></td>
+                <td><input type="number" step="0.01" class="form-control form-control-sm release-input"></td>
+                <td><input type="text" class="form-control form-control-sm percentage-output" readonly></td>
+                <td><textarea class="form-control form-control-sm" rows="2"></textarea></td>
+            </tr>`);
+        });
+
+        // ==========================================
+        // AUTO-CALCULATION LOGIC
+        // ==========================================
+        document.addEventListener('change', function(e) {
+            // Personnel Total
+            if(e.target.classList.contains('personnel-select')) {
+                let total = 0;
+                document.querySelectorAll('.personnel-select').forEach(sel => {
+                    total += Number(sel.value) || 0;
+                });
+                document.getElementById('personnelTotal').value = total;
+            }
+        });
+
+        document.addEventListener('input', function(e) {
+            // Expenditure Total
+            if(e.target.classList.contains('expenditure-input')) {
+                let total = 0;
+                document.querySelectorAll('.expenditure-input').forEach(inp => {
+                    total += Number(inp.value) || 0;
+                });
+                document.getElementById('expenditureTotal').value = total.toFixed(2);
+            }
+
+            // Budget Percentage Calculation
+            if(e.target.classList.contains('budget-input') || e.target.classList.contains('release-input')) {
+                const row = e.target.closest('tr');
+                const budgeted = Number(row.querySelector('.budget-input').value) || 0;
+                const released = Number(row.querySelector('.release-input').value) || 0;
+                const percentageField = row.querySelector('.percentage-output');
+                
+                if (budgeted > 0) {
+                    percentageField.value = ((released / budgeted) * 100).toFixed(2) + '%';
+                } else {
+                    percentageField.value = '0%';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

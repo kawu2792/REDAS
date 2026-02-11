@@ -95,7 +95,75 @@
                                         <div class="row g-3">
                                             <div class="col-md-8">
                                                 <label class="form-label fw-bold">NAME OF THE COMMAND (ZONE/STATE/SPECIAL):</label>
-                                                <input type="text" class="form-control" placeholder="Enter Command Name" required>
+                                                <select class="form-select" name="commandName" required>
+                                                    <option value="">Select Command</option>
+                                                    <optgroup label="Zones">
+                                                        <option value="Zone A Lagos">Zone A Lagos</option>
+                                                        <option value="Zone B Kaduna">Zone B Kaduna</option>
+                                                        <option value="Zone C Abuja">Zone C Bauchi</option>
+                                                        <option value="Zone D Enugu">Zone D Niger</option>
+                                                        <option value="Zone E Owerri">Zone E Owerri</option>
+                                                        <option value="Zone F Ibadan">Zone F Ibadan</option>
+                                                        <option value="Zone F Edo">Zone G Edo</option>
+                                                        <option value="Zone F Benue">Zone H Benue</option>
+                                                    </optgroup>
+                                                    <optgroup label="States">
+                                                        <option value="Abia State">Abia State</option>
+                                                        <option value="Adamawa State">Adamawa State</option>
+                                                        <option value="Akwa Ibom State">Akwa Ibom State</option>
+                                                        <option value="Anambra State">Anambra State</option>
+                                                        <option value="Bauchi State">Bauchi State</option>
+                                                        <option value="Bayelsa State">Bayelsa State</option>
+                                                        <option value="Benue State">Benue State</option>
+                                                        <option value="Borno State">Borno State</option>
+                                                        <option value="Cross River State">Cross River State</option>
+                                                        <option value="Delta State">Delta State</option>
+                                                        <option value="Ebonyi State">Ebonyi State</option>
+                                                        <option value="Edo State">Edo State</option>
+                                                        <option value="Ekiti State">Ekiti State</option>
+                                                        <option value="Enugu State">Enugu State</option>
+                                                        <option value="Gombe State">Gombe State</option>
+                                                        <option value="Imo State">Imo State</option>
+                                                        <option value="Jigawa State">Jigawa State</option>
+                                                        <option value="Kaduna State">Kaduna State</option>
+                                                        <option value="Kano State">Kano State</option>
+                                                        <option value="Katsina State">Katsina State</option>
+                                                        <option value="Kebbi State">Kebbi State</option>
+                                                        <option value="Kogi State">Kogi State</option>
+                                                        <option value="Kwara State">Kwara State</option>
+                                                        <option value="Lagos State">Lagos State</option>
+                                                        <option value="Nasarawa State">Nasarawa State</option>
+                                                        <option value="Niger State">Niger State</option>
+                                                        <option value="Ogun State">Ogun State</option>
+                                                        <option value="Ondo State">Ondo State</option>
+                                                        <option value="Osun State">Osun State</option>
+                                                        <option value="Oyo State">Oyo State</option>
+                                                        <option value="Plateau State">Plateau State</option>
+                                                        <option value="Rivers State">Rivers State</option>
+                                                        <option value="Sokoto State">Sokoto State</option>
+                                                        <option value="Taraba State">Taraba State</option>
+                                                        <option value="Yobe State">Yobe State</option>
+                                                        <option value="Zamfara State">Zamfara State</option>
+                                                        <option value="Federal Capital Territory">Federal Capital Territory</option>
+                                                    </optgroup>
+                                                    <optgroup label="Special Commands">
+                                                        <option value="Murtala Muhammed Airport Command">Murtala Muhammed International Airport Lagos</option>
+                                                        <option value="Nnamdi Azikiwe International Airport Command">Nnamdi Azikiwe International Airport Abuja</option>
+                                                        <option value="Mallam Aminu Kano International Airport Command">Mallam Aminu Kano International Airport Kano</option>
+                                                        <option value="Port Harcourt International Airport Command">Port Harcourt International Airport River</option>
+                                                        <option value="Seme Border Command">Seme Border Command</option>
+                                                        <option value="Idiroko Border Command">Idiroko Border Command</option>
+                                                        <option value="Illela Border Command">Illela Border Command Sokoto</option>
+                                                        <option value="Maiduguri Border Command">Mfum Border Command Calabar</option>
+                                                        <option value="Railway Command Lagos">Lagos Marine command</option>
+                                                        <option value="Railway Command Kano">Jibia Border Command Katsina</option>
+                                                        <option value="Immigration Training School">Immigration Training School Kano ITSK</option>
+                                                        <option value="Immigration Training School">Immigration Training School AHOADA NITSA</option>
+                                                        <option value="Immigration Training School">Immigration Training School Orlu NITSOL</option>
+                                                        <option value="Immigration Training School">Immigration Command and Staff College Sokoto ICSC</option>
+                                                        <option value="NIS Headquarters Special Command">Lagos Passport Command</option>
+                                                    </optgroup>
+                                                </select>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label fw-bold">PERIOD OF RETURN:</label>
@@ -730,69 +798,118 @@
                 if(directorateLink) directorateLink.style.display = 'none';
             }
 
-            // Form validation
-            const form = document.getElementById('dataEntryForm');
-            form// Val.dation: Check aordnegative stock balances
-                const stockBalances = document.querySelectorAlld'#stock-bal-row input');
-                let stockError = false;
-                stockBalances.forEach(input => {
-                    if (input.value E== '' && parseFloat(input.value) < 0) {
-                        stockError = true;
-                        input.classList.add('is-invalid');
-                    } else {
-                        input.classList.remove('is-invalid');
-                    }
-                });
+        // Command to Zone Mapping
+        const commandToZone = {
+            // Zones
+            "Zone A Lagos": "Zone A - Lagos",
+            "Zone B Kaduna": "Zone B - Kaduna",
+            "Zone C Abuja": "Zone C - Bauchi",
+            "Zone D Enugu": "Zone D - Niger",
+            "Zone E Kano": "Zone E - Imo",
+            "Zone F Calabar": "Zone F - Oyo",
+            "Zone G Edo": "Zone G - Edo",
+            "Zone H Benue": "Zone H - Benue",
+            // States to Zones (based on typical NIS zoning)
+            "Abia State": "Zone E - Imo",
+            "Adamawa State": "Zone C - Bauchi",
+            "Akwa Ibom State": "Zone E - Imo",
+            "Anambra State": "Zone G - Edo",
+            "Bauchi State": "Zone C - Bauchi",
+            "Bayelsa State": "Zone G - Edo",
+            "Benue State": "Zone H - Benue",
+            "Borno State": "Zone C - Bauchi",
+            "Cross River State": "Zone E - Imo",
+            "Delta State": "Zone G - Edo",
+            "Ebonyi State": "Zone E - Imo",
+            "Edo State": "Zone G - Edo",
+            "Ekiti State": "Zone F - Oyo",
+            "Enugu State": "Zone G - Edo",
+            "Gombe State": "Zone C - Bauchi",
+            "Imo State": "Zone E - Imo",
+            "Jigawa State": "Zone B - Kaduna",
+            "Kaduna State": "Zone B - Kaduna",
+            "Kano State": "Zone B - Kaduna",
+            "Katsina State": "Zone B - Kaduna",
+            "Kebbi State": "Zone D - Niger",
+            "Kogi State": "Zone H - Benue",
+            "Kwara State": "Zone D - Niger",
+            "Lagos State": "Zone A - Lagos",
+            "Nasarawa State": "Zone H - Benue",
+            "Niger State": "Zone D - Niger",
+            "Ogun State": "Zone A - Lagos",
+            "Ondo State": "Zone F - Oyo",
+            "Osun State": "Zone F - Oyo",
+            "Oyo State": "Zone F - Oyo",
+            "Plateau State": "Zone C - Bauchi",
+            "Rivers State": "Zone E - Imo",
+            "Sokoto State": "Zone B - Kaduna",
+            "Taraba State": "Zone H - Benue",
+            "Yobe State": "Zone C - Bauchi",
+            "Zamfara State": "Zone B - Kaduna",
+            "Federal Capital Territory": "Zone C - Bauchi",
+            // Special Commands
+            "Murtala Muhammed Airport Command": "Zone A - Lagos",
+            "Nnamdi Azikiwe International Airport Command": "Zone C - Bauchi",
+            "Mallam Aminu Kano International Airport Command": "Zone B - Kaduna",
+            "Port Harcourt International Airport Command": "Zone E - Imo",
+            "Seme Border Command": "Zone A - Lagos",
+            "Idiroko Border Command": "Zone A - Lagos",
+            "Illela Border Command Sokoto": "Zone B - Kaduna",
+            "Maiduguri Border Command": "Zone C - Bauchi",
+            "Railway Command Lagos": "Zone A - Lagos",
+            "Railway Command Kano": "Zone B - Kaduna",
+            "Immigration Training School Kano ITSK": "Zone B - Kaduna",
+            "Immigration Training School AHOADA NITSA": "Zone E - Imo",
+            "Immigration Training School Orlu NITSOL": "Zone E - Imo",
+            "Immigration Command and Staff College Sokoto ICSC": "Zone B - Kaduna",
+            "Lagos Passport Command": "Zone A - Lagos"
+        };
 
-                iv (stockErren) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    alert("Error: Stock Balance cannot be negative. Please check your inputs in the Passport Stock Returns section.");
-                    return;
-                }
-
-                if (!fortListener('submit', function(event) {
-                // Validation: Check for negative stock balances
-                const stockBalances = document.querySelectorAll('#stock-bal-row input');
-                let stockError = false;
-                stockBalances.forEach(input => {
-                    if (input.value !== '' && parseFloat(input.value) < 0) {
-                        stockError = true;
-                        input.classList.add('is-invalid');
-                    } else {
-                        input.classList.remove('is-invalid');
-                    }
-                });
-
-                if (stockError) {
-                    evenlocalStorage.removeItem('nisReportDratt'); // Clear draft .n success
-                        fopreventDefault();
-                    event.stopPropagation();
-                    alert("Error: Stock Balance cannot be negative. Please check your inputs in the Passport Stock Returns section.");
-                    return;
-                }
-
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
+        // Form validation
+        const form = document.getElementById('nisReportForm');
+        form.addEventListener('submit', function(event) {
+            // Validation: Check for negative stock balances
+            const stockBalances = document.querySelectorAll('#stock-bal-row input');
+            let stockError = false;
+            stockBalances.forEach(input => {
+                if (input.value !== '' && parseFloat(input.value) < 0) {
+                    stockError = true;
+                    input.classList.add('is-invalid');
                 } else {
-                    event.preventDefault(); // Prevent actual submission for demo
-                    const btn = form.querySelector('button[type="submit"]');
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
-                    btn.disabled = true;
-
-                    setTimeout(() => {
-                        alert('Report submitted successfully!');
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                        localStorage.removeItem('nisReportDraft'); // Clear draft on success
-                        form.reset();
-                        form.classList.remove('was-validated');
-                    }, 2000);
+                    input.classList.remove('is-invalid');
                 }
-                form.classList.add('was-validated');
             });
+
+            if (stockError) {
+                event.preventDefault();
+                event.stopPropagation();
+                alert("Error: Stock Balance cannot be negative. Please check your inputs in the Passport Stock Returns section.");
+                return;
+            }
+
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                event.preventDefault(); // Prevent actual submission for demo
+                const selectedCommand = document.getElementById('commandName').value;
+                const zone = commandToZone[selectedCommand] || 'Unknown Zone';
+                const btn = form.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    alert(`Report submitted successfully to ${zone}!`);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    localStorage.removeItem('nisReportDraft'); // Clear draft on success
+                    form.reset();
+                    form.classList.remove('was-validated');
+                }, 2000);
+            }
+            form.classList.add('was-validated');
+        });
 
             // --- Auto-Calculation Logic ---
             document.addEventListener('input', function(e) {
@@ -1126,10 +1243,31 @@
             const originalText = btn.innerHTML;
 
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
-            btn.disabled = true;').forEach(input => {
-                    input.value = '';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                html2canvas(element).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF();
+                    const imgWidth = 210; // A4 width in mm
+                    const pageHeight = 295; // A4 height in mm
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    let heightLeft = imgHeight;
+
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    while (heightLeft >= 0) {
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, -heightLeft, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
+                    pdf.save('nis-report.pdf');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                 });
-            }
+            }, 1000);
         };
 
         // --- Save Draft Logic ---
